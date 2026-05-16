@@ -10,7 +10,7 @@ namespace SahilPlanProje.WebApi.Context
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //Add-Migration mig3
-            //Update - Database
+            //Update-Database
             //optionsBuilder.UseSqlServer(
             //    "Server=KAYA;Database=ApiSahilPlanProje;User Id=sa;Password=1453;TrustServerCertificate=True;"
             //);
@@ -19,6 +19,7 @@ namespace SahilPlanProje.WebApi.Context
                     );
         }
         public DbSet<Feature> Features { get; set; }
+        public DbSet<Contact> Contacts { get; set; }
 
         public DbSet<City> Cities { get; set; }
 
