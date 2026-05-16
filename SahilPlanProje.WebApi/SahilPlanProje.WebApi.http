@@ -1,0 +1,6 @@
+@SahilPlanProje.WebApi_HostAddress = http://localhost:5129
+
+GET {{SahilPlanProje.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
