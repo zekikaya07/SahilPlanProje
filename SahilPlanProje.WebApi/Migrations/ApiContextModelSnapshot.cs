@@ -160,6 +160,61 @@ namespace SahilPlanProje.WebApi.Migrations
                     b.ToTable("Features");
                 });
 
+            modelBuilder.Entity("SahilPlanProje.WebApi.Entities.Message", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<string>("email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("is_read")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("messahe_detail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("name_surname")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("send_date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("subject")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id");
+
+                    b.ToTable("Messages");
+                });
+
+            modelBuilder.Entity("SahilPlanProje.WebApi.Entities.Product", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<double>("price")
+                        .HasColumnType("float");
+
+                    b.Property<string>("product_name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id");
+
+                    b.ToTable("Products");
+                });
+
             modelBuilder.Entity("SahilPlanProje.WebApi.Entities.TahakkukDefinition", b =>
                 {
                     b.Property<int>("id")

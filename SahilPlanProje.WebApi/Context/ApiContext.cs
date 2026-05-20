@@ -20,6 +20,8 @@ namespace SahilPlanProje.WebApi.Context
         }
         public DbSet<Feature> Features { get; set; }
         public DbSet<Contact> Contacts { get; set; }
+        public DbSet<Message> Messages { get; set; }
+        public DbSet<Product> Products { get; set; }
 
         public DbSet<City> Cities { get; set; }
 

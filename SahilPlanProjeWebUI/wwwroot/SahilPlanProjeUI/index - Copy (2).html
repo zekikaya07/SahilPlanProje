@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <!-- Basic -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">   
+   
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+ 
+     <!-- Site Metas -->
+    <title>Sahil Plan Proje - Plan Proje Geliştirme</title>  
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="author" content="">
+	
+	<link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
+	<link rel="shortcut icon" href="images/favicon/favicon.ico">
+	
+    <!-- Site Icons -->
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- Site CSS -->
+    <link rel="stylesheet" href="style.css">
+    <!-- ALL VERSION CSS -->
+    <link rel="stylesheet" href="css/versions.css">
+    <!-- Responsive CSS -->
+    <link rel="stylesheet" href="css/responsive.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/custom.css">
+
+    <!-- Modernizer for Portfolio -->
+    <script src="js/modernizer.js"></script>
+
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+<body class="host_version"> 
+
+	<!-- Modal -->
+	<div class="modal fade" id="login" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header tit-up">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Customer Login</h4>
+			</div>
+			<div class="modal-body customer-box">
+				<!-- Nav tabs -->
+				<ul class="nav nav-tabs">
+					<li><a class="active" href="#Login" data-toggle="tab">Login</a></li>
+					<li><a href="#Registration" data-toggle="tab">Registration</a></li>
+				</ul>
+				<!-- Tab panes -->
+				<div class="tab-content">
+					<div class="tab-pane active" id="Login">
+						<form role="form" class="form-horizontal">
+							<div class="form-group">
+								<div class="col-sm-12">
+									<input class="form-control" id="email1" placeholder="Name" type="text">
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-12">
+									<input class="form-control" id="exampleInputPassword1" placeholder="Email" type="email">
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-10">
+									<button type="submit" class="btn btn-light btn-radius btn-brd grd1">
+										Submit
+									</button>
+									<a class="for-pwd" href="javascript:;">Forgot your password?</a>
+								</div>
+							</div>
+						</form>
+					</div>
+					<div class="tab-pane" id="Registration">
+						<form role="form" class="form-horizontal">
+							<div class="form-group">
+								<div class="col-sm-12">
+									<input class="form-control" placeholder="Name" type="text">
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-12">
+									<input class="form-control" id="email" placeholder="Email" type="email">
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-12">
+									<input class="form-control" id="mobile" placeholder="Mobile" type="email">
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-12">
+									<input class="form-control" id="password" placeholder="Password" type="password">
+								</div>
+							</div>
+							<div class="row">							
+								<div class="col-sm-10">
+									<button type="button" class="btn btn-light btn-radius btn-brd grd1">
+										Save &amp; Continue
+									</button>
+									<button type="button" class="btn btn-light btn-radius btn-brd grd1">
+										Cancel</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	  </div>
+	</div>
+
+    <!-- LOADER -->
+	<div id="preloader">
+		<div class="loader-container">
+			<div class="progress-br float shadow">
+				<div class="progress__item"></div>
+			</div>
+		</div>
+	</div>
+	<!-- END LOADER -->	
+	
+	<!-- Start header -->
+	<header class="top-navbar">
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+			<div class="container-fluid">
+				<a class="navbar-brand" href="index.html">
+					<img src="images/logo-hosting.png" alt="" />
+				</a>
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbars-host" aria-controls="navbars-rs-food" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbars-host">
+					<ul class="navbar-nav ml-auto">
+						<li class="nav-item active"><a class="nav-link" href="index.html">Ana Sayfa</a></li>
+						<li class="nav-item"><a class="nav-link" href="about.html">Hakkımızda</a></li>
+						<li class="nav-item"><a class="nav-link" href="features.html">Neler Yapıyoruz </a></li>
+						<!-- <li class="nav-item dropdown"> -->
+							<!-- <a class="nav-link dropdown-toggle" href="#" id="dropdown-a" data-toggle="dropdown">Hosting </a> -->
+							<!-- <div class="dropdown-menu" aria-labelledby="dropdown-a"> -->
+								<!-- <a class="dropdown-item" href="hosting.html">Web Hosting </a> -->
+								<!-- <a class="dropdown-item" href="hosting.html">WordPress Hosting </a> -->
+								<!-- <a class="dropdown-item" href="hosting.html">Cloud Server </a> -->
+								<!-- <a class="dropdown-item" href="hosting.html">Reseller Package </a> -->
+								<!-- <a class="dropdown-item" href="hosting.html">Dedicated Hosting </a> -->
+							<!-- </div> -->
+						<!-- </li> -->
+						<li class="nav-item"><a class="nav-link" href="domain.html">Planlama Hakkında</a></li>
+						<li class="nav-item"><a class="nav-link" href="pricing.html">Hesaplama</a></li>
+						<li class="nav-item"><a class="nav-link" href="contact.html">İletişim</a></li>
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
+                        <li><a class="hover-btn-new log" href="#" data-toggle="modal" data-target="#login"><span>Giriş</span></a></li>
+                    </ul>
+				</div>
+			</div>
+		</nav>
+	</header>
+	<!-- End header -->
+	
+	<div id="carouselExampleControls" class="carousel slide bs-slider box-slider" data-ride="carousel" data-pause="hover" data-interval="3000" >
+		<!-- Indicators -->
+		<ol class="carousel-indicators">
+			<li data-target="#carouselExampleControls" data-slide-to="0" class="active"></li>
+			<li data-target="#carouselExampleControls" data-slide-to="1"></li>
+			<li data-target="#carouselExampleControls" data-slide-to="2"></li>
+		</ol>
+		<div class="carousel-inner" role="listbox">
+			<div class="carousel-item active">
+				<div id="home" class="first-section" style="background-image:url('images/slider-01.jpg');">
+					<div class="dtab">
+						<div class="container">
+							<div class="row">
+								<div class="col-md-12 col-sm-12 text-right">
+									<div class="big-tagline">
+										<h2><strong>Sahil Plan Proje</strong> Mühendislik ve Danışmanlık</h2>
+										<p class="lead">
+										Kentsel dönüşüm, altyapı projeleri ve planlama çözümlerinde modern ve sürdürülebilir yaklaşımlar sunuyoruz.
+										</p>
+										<a href="#" class="hover-btn-new"><span>İletişime Geç</span></a>
+										<a href="#" class="hover-btn-new"><span>Detaylı Bilgi</span></a>
+									</div>
+								</div>
+							</div><!-- end row -->            
+						</div><!-- end container -->
+					</div>
+				</div><!-- end section -->
+			</div>
+			<div class="carousel-item">
+				<div id="home" class="first-section" style="background-image:url('images/slider-02.jpg');">
+					<div class="dtab">
+						<div class="container">
+							<div class="row">
+								<div class="col-md-12 col-sm-12 text-left">
+									<div class="big-tagline">
+										<h2 data-animation="animated zoomInRight">
+										Doğru <strong>Planlama</strong> ile Geleceği Şekillendiriyoruz
+										</h2>
+										<p class="lead">
+										Sahil Plan Proje olarak şehir planlama, mimari çözüm ve mühendislik hizmetlerini entegre şekilde sunuyoruz.
+										</p>
+										<a href="#" class="hover-btn-new"><span>İletişime Geç</span></a>
+										<a href="#" class="hover-btn-new"><span>Detaylı Bilgi</span></a>
+									</div>
+								</div>
+							</div><!-- end row -->            
+						</div><!-- end container -->
+					</div>
+				</div><!-- end section -->
+			</div>
+			<div class="carousel-item">
+				<div id="home" class="first-section" style="background-image:url('images/slider-03.jpg');">
+					<div class="dtab">
+						<div class="container">
+							<div class="row">
+								<div class="col-md-12 col-sm-12 text-center">
+									<div class="big-tagline">
+										<h2 data-animation="animated zoomInRight">
+										<strong>Altyapı ve Proje Yönetimi</strong> Uzmanlığı
+										</h2>
+										<p class="lead">
+										Su, kanalizasyon, yol ve çevre projelerinde uçtan uca mühendislik çözümleri sağlıyoruz.
+										</p>
+										<a href="#" class="hover-btn-new"><span>İletişime Geç</span></a>
+										<a href="#" class="hover-btn-new"><span>Detaylı Bilgi</span></a>
+									</div>
+								</div>
+							</div><!-- end row -->            
+						</div><!-- end container -->
+					</div>
+				</div><!-- end section -->
+			</div>
+			<!-- Left Control -->
+			<a class="new-effect carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+				<span class="fa fa-angle-left" aria-hidden="true"></span>
+				<span class="sr-only">Önceki</span>
+			</a>
+
+			<!-- Right Control -->
+			<a class="new-effect carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+				<span class="fa fa-angle-right" aria-hidden="true"></span>
+				<span class="sr-only">Sonraki</span>
+			</a>
+		</div>
+	</div>
+	
+	
+	<div id="domain" class="section wb">
+        <div class="container">
+            <!-- <div class="row text-center"> -->
+
+                <!-- <div class="col-lg-12"> -->
+                    <!-- <form class="checkdomain form-inline"> -->
+					
+					
+                            <!-- <div class="form-group"> -->
+                                <!-- <label class="sr-only" for="domainnamehere">Domain name</label> -->
+                                <!-- <input type="text" class="form-control" id="domainnamehere" placeholder="Enter domain name here.."> -->
+                                <!-- <button type="submit" class="btn btn-primary grd1"><i class="fa fa-search"></i></button> -->
+                            <!-- </div> -->
+                            <!-- <hr> -->
+                            <!-- <div class="clearfix"></div> -->
+                            <!-- <div class="checkbox checkbox-warning"> -->
+                                <!-- <input id="domaincom" type="checkbox" class="styled" checked> -->
+                                <!-- <label for="domaincom">.com</label> -->
+                            <!-- </div> -->
+                            <!-- <div class="checkbox checkbox-warning"> -->
+                                <!-- <input id="domainnet" type="checkbox" class="styled" checked> -->
+                                <!-- <label for="domainnet">.net</label> -->
+                            <!-- </div> -->
+                            <!-- <div class="checkbox checkbox-warning"> -->
+                                <!-- <input id="domainorg" type="checkbox" class="styled"> -->
+                                <!-- <label for="domainorg">.org</label> -->
+                            <!-- </div> -->
+                            <!-- <div class="checkbox checkbox-warning"> -->
+                                <!-- <input id="domaintv" type="checkbox" class="styled"> -->
+                                <!-- <label for="domaintv">.tv</label> -->
+                            <!-- </div> -->
+                            <!-- <div class="checkbox checkbox-warning"> -->
+                                <!-- <input id="domaininfo" type="checkbox" class="styled"> -->
+                                <!-- <label for="domaininfo">.info</label> -->
+                            <!-- </div> -->
+                        <!-- </div><!-- end checkdomain-wrapper -->
+                    <!-- </form> -->
+                <!-- </div> -->
+				<div class="col-lg-12">
+                    <div class="customwidget text-center">
+					
+                        <div class="checkdomain-wrapper">
+						
+
+                    <h2>Sahil Plan Proje</h2>
+
+                    <p>
+                        Sahil Plan Proje, şehir planlama, altyapı mühendisliği ve proje danışmanlığı alanlarında
+                        yenilikçi ve sürdürülebilir çözümler sunar.
+                    </p>
+
+                    <p>
+                        Deneyimli ekibimiz ile belediyeler, özel sektör ve yatırımcılar için
+                        güvenilir ve uygulanabilir projeler geliştiriyoruz.
+                    </p>
+
+                    <ul class="list-inline">
+                        <li><i class="fa fa-check"></i> İmar Planlama</li>
+                        <li><i class="fa fa-check"></i> Altyapı Projeleri</li>
+                        <li><i class="fa fa-check"></i> Proje Danışmanlığı</li>
+                    </ul>
+
+                    <a href="#" class="hover-btn-new">
+                        <span>Detaylı Bilgi</span>
+                    </a>
+					
+                    </div>
+                </div>
+				
+                <!-- end col -->
+            </div><!-- end row -->
+        </div><!-- end container -->
+    </div><!-- end section -->
+	
+    <div id="overviews" class="section lb">
+        <div class="container">
+            <div class="section-title row text-center">
+                <div class="col-md-8 offset-md-2">
+                    <h3>Hakkımızda</h3>
+					<h4>Planlama ve Mühendislikte Güvenilir Çözüm Ortağınız</h4>
+					<h2>Sürdürülebilir Şehirler İçin Çalışıyoruz</h2>
+
+					<p>
+					Sahil Plan Proje, şehir planlama, altyapı mühendisliği ve proje danışmanlığı alanlarında uzman kadrosu ile hizmet vermektedir.
+					</p>
+
+					<p>
+					Amacımız; modern şehirlerin ihtiyaçlarına uygun, çevreye duyarlı ve sürdürülebilir projeler üretmektir.
+					</p>
+
+					<a href="#" class="hover-btn-new"><span>Daha Fazla Bilgi</span></a>
+                </div>
+            </div><!-- end title -->
+        
+			<div class="row align-items-center">
+
+				<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+					<div class="message-box">
+
+						<h4>KURUMSAL YAPI</h4>
+						<h2>Güvenilir Mühendislik ve Planlama Hizmetleri</h2>
+
+						<p>
+							Sahil Plan Proje, şehir planlama ve altyapı mühendisliği alanlarında
+							modern, sürdürülebilir ve uygulanabilir çözümler üretmek amacıyla kurulmuştur.
+						</p>
+
+						<p>
+							Projelerimizde kalite, doğruluk ve uzun vadeli fayda önceliğimizdir.
+							Kamu ve özel sektör iş birliklerinde güçlü referanslara sahibiz.
+						</p>
+
+						<a href="#" class="hover-btn-new"><span>Detaylı Bilgi</span></a>
+
+					</div>
+				</div>
+
+				<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+					<div class="post-media wow fadeIn">
+						<img src="images/about_02.jpg" alt="Sahil Plan Proje" class="img-fluid img-rounded">
+					</div>
+				</div>
+
+			</div>
+
+
+			<div class="row align-items-center">
+
+				<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+					<div class="post-media wow fadeIn">
+						<img src="images/about_03.jpg" alt="Proje Çalışmaları" class="img-fluid img-rounded">
+					</div>
+				</div>
+
+				<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+					<div class="message-box">
+
+						<h2>Deneyim ve Profesyonel Yaklaşım</h2>
+
+						<p>
+							Uzman kadromuz ile imar planları, altyapı projeleri ve teknik danışmanlık
+							hizmetlerinde yüksek standartlarda çözümler sunuyoruz.
+						</p>
+
+						<p>
+							Her projede detaylı analiz, doğru planlama ve sürdürülebilirlik ilkeleri ile
+							hareket ederek müşterilerimize değer katıyoruz.
+						</p>
+
+						<a href="#" class="hover-btn-new"><span>Projelerimiz</span></a>
+
+					</div>
+				</div>
+
+			</div>
+		</div><!-- end container -->
+    </div><!-- end section -->
+
+	<section class="page-section">
+		<div class="container">
+
+			<div class="section-title row text-center">
+				<div class="col-md-8 offset-md-2">
+					<h3>Kurumsal Gelişim Sürecimiz</h3>
+					<p class="lead">
+						Sahil Plan Proje’nin kuruluşundan bugüne kadar geçen süreçte,
+						mühendislik ve planlama alanında attığımız önemli adımlar.
+					</p>
+				</div>
+			</div>
+
+			<div class="timeline">
+				<div class="timeline__wrap">
+					<div class="timeline__items">
+
+						<div class="timeline__item">
+							<div class="timeline__content img-bg-01">
+								<h2>2026</h2>
+								<p>
+									Dijital dönüşüm kapsamında yeni nesil proje yönetim ve
+									analiz sistemleri devreye alındı.
+								</p>
+							</div>
+						</div>
+
+						<div class="timeline__item">
+							<div class="timeline__content img-bg-02">
+								<h2>2024</h2>
+								<p>
+									Büyük ölçekli altyapı projelerinde aktif rol alınarak
+									birçok şehirde çalışmalar gerçekleştirildi.
+								</p>
+							</div>
+						</div>
+
+						<div class="timeline__item">
+							<div class="timeline__content img-bg-03">
+								<h2>2022</h2>
+								<p>
+									Belediye ve özel sektör iş birlikleri artırılarak
+									proje portföyü genişletildi.
+								</p>
+							</div>
+						</div>
+
+						<div class="timeline__item">
+							<div class="timeline__content img-bg-04">
+								<h2>2020</h2>
+								<p>
+									Altyapı ve imar planlama alanlarında uzman ekip
+									yapısı güçlendirildi.
+								</p>
+							</div>
+						</div>
+
+						<div class="timeline__item">
+							<div class="timeline__content img-bg-01">
+								<h2>2018</h2>
+								<p>
+									Sahil Plan Proje kurularak mühendislik ve danışmanlık
+									hizmetleri sunulmaya başlandı.
+								</p>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</section>
+	<div class="section cl">
+		<div class="container">
+			<div class="row text-left stat-wrap">
+				<div class="col-md-4 col-sm-4 col-xs-12">
+					<span data-scroll class="global-radius icon_wrap effect-1 alignleft"><i class="flaticon-hosting"></i></span>
+					<p class="stat_count">25+</p>
+					<h3>Tamamlanan Proje</h3>
+				</div><!-- end col -->
+
+				<div class="col-md-4 col-sm-4 col-xs-12">
+					<span data-scroll class="global-radius icon_wrap effect-1 alignleft"><i class="flaticon-domain-registration"></i></span>
+					<p class="stat_count">50+</p>
+					<h3>Farklı Şehir</h3>
+				</div><!-- end col -->
+
+				<div class="col-md-4 col-sm-4 col-xs-12">
+					<span data-scroll class="global-radius icon_wrap effect-1 alignleft"><i class="flaticon-mail"></i></span>
+					<p class="stat_count">20+</p>
+					<h3>Yıl Deneyim</h3>
+				</div><!-- end col -->
+			</div><!-- end row -->
+		</div><!-- end container -->
+	</div><!-- end section -->
+
+    <!-- <div id="pricing" class="section lb"> -->
+        <!-- <div class="container"> -->
+            <!-- <div class="section-title text-center"> -->
+                <!-- <h3>Ready to get started?</h3> -->
+                <!-- <p>Lorem ipsum dolor sit aet, consectetur adipisicing lit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p> -->
+            <!-- </div><!-- end title --> -->
+
+            <!-- <div class="row"> -->
+                <!-- <div class="col-md-6 offset-md-3"> -->
+                    <!-- <div class="message-box"> -->
+                        <!-- <ul class="nav nav-pills nav-stacked" id="myTabs"> -->
+                            <!-- <li><a class="active" href="#tab1" data-toggle="pill">Monthly Subscription</a></li> -->
+                            <!-- <li><a href="#tab2" data-toggle="pill">Yearly Subscription</a></li> -->
+                        <!-- </ul> -->
+                    <!-- </div> -->
+                <!-- </div><!-- end col --> -->
+            <!-- </div> -->
+
+            <!-- <hr class="invis"> -->
+
+            <!-- <div class="row"> -->
+                <!-- <div class="col-md-12"> -->
+                    <!-- <div class="tab-content"> -->
+                        <!-- <div class="tab-pane active fade show" id="tab1"> -->
+                            <!-- <div class="row text-center"> -->
+                                <!-- <div class="col-md-4"> -->
+                                    <!-- <div class="pricing-table pricing-table-highlighted"> -->
+                                        <!-- <div class="pricing-table-header grd1"> -->
+                                            <!-- <h2>Shared Hosting</h2> -->
+                                            <!-- <h3>$85/month</h3> -->
+                                        <!-- </div> -->
+                                        <!-- <div class="pricing-table-space"></div> -->
+                                        <!-- <div class="pricing-table-features"> -->
+                                            <!-- <p><i class="fa fa-envelope-o"></i> <strong>250</strong> Email Addresses</p> -->
+                                            <!-- <p><i class="fa fa-rocket"></i> <strong>125GB</strong> of Storage</p> -->
+                                            <!-- <p><i class="fa fa-database"></i> <strong>140</strong> Databases</p> -->
+                                            <!-- <p><i class="fa fa-link"></i> <strong>60</strong> Domains</p> -->
+                                            <!-- <p><i class="fa fa-life-ring"></i> <strong>24/7 Unlimited</strong> Support</p> -->
+                                        <!-- </div> -->
+                                        <!-- <div class="pricing-table-sign-up"> -->
+                                            <!-- <a href="#" class="hover-btn-new"><span>Order Now</span></a> -->
+                                        <!-- </div> -->
+                                    <!-- </div> -->
+                                <!-- </div> -->
+                                <!-- <div class="col-md-4"> -->
+                                    <!-- <div class="pricing-table pricing-table-highlighted"> -->
+                                        <!-- <div class="pricing-table-header grd1"> -->
+                                            <!-- <h2>WordPress Hosting</h2> -->
+                                            <!-- <h3>$59/month</h3> -->
+                                        <!-- </div> -->
+                                        <!-- <div class="pricing-table-space"></div> -->
+                                        <!-- <div class="pricing-table-features"> -->
+                                            <!-- <p><i class="fa fa-envelope-o"></i> <strong>150</strong> Email Addresses</p> -->
+                                            <!-- <p><i class="fa fa-rocket"></i> <strong>65GB</strong> of Storage</p> -->
+                                            <!-- <p><i class="fa fa-database"></i> <strong>60</strong> Databases</p> -->
+                                            <!-- <p><i class="fa fa-link"></i> <strong>30</strong> Domains</p> -->
+                                            <!-- <p><i class="fa fa-life-ring"></i> <strong>24/7 Unlimited</strong> Support</p> -->
+                                        <!-- </div> -->
+                                        <!-- <div class="pricing-table-sign-up"> -->
+                                            <!-- <a href="#" class="hover-btn-new"><span>Order Now</span></a> -->
+                                        <!-- </div> -->
+                                    <!-- </div> -->
+                                <!-- </div> -->
+
+                                <!-- <div class="col-md-4"> -->
+                                    <!-- <div class="pricing-table pricing-table-highlighted"> -->
+                                        <!-- <div class="pricing-table-header grd1"> -->
+                                            <!-- <h2>Reseller Hosting</h2> -->
+                                            <!-- <h3>$85/month</h3> -->
+                                        <!-- </div> -->
+                                        <!-- <div class="pricing-table-space"></div> -->
+                                        <!-- <div class="pricing-table-features"> -->
+                                            <!-- <p><i class="fa fa-envelope-o"></i> <strong>250</strong> Email Addresses</p> -->
+                                            <!-- <p><i class="fa fa-rocket"></i> <strong>125GB</strong> of Storage</p> -->
+                                            <!-- <p><i class="fa fa-database"></i> <strong>140</strong> Databases</p> -->
+                                            <!-- <p><i class="fa fa-link"></i> <strong>60</strong> Domains</p> -->
+                                            <!-- <p><i class="fa fa-life-ring"></i> <strong>24/7 Unlimited</strong> Support</p> -->
+                                        <!-- </div> -->
+                                        <!-- <div class="pricing-table-sign-up"> -->
+                                            <!-- <a href="#" class="hover-btn-new"><span>Order Now</span></a> -->
+                                        <!-- </div> -->
+                                    <!-- </div> -->
+                                <!-- </div> -->
+                            <!-- </div><!-- end row --> -->
+                        <!-- </div><!-- end pane --> -->
+
+                        <!-- <div class="tab-pane fade" id="tab2"> -->
+                            <!-- <div class="row text-center"> -->
+                                <!-- <div class="col-md-4"> -->
+                                    <!-- <div class="pricing-table pricing-table-highlighted"> -->
+                                        <!-- <div class="pricing-table-header grd1"> -->
+                                            <!-- <h2>Shared Hosting</h2> -->
+                                            <!-- <h3>$85/Year</h3> -->
+                                        <!-- </div> -->
+                                        <!-- <div class="pricing-table-space"></div> -->
+                                        <!-- <div class="pricing-table-features"> -->
+                                            <!-- <p><i class="fa fa-envelope-o"></i> <strong>250</strong> Email Addresses</p> -->
+                                            <!-- <p><i class="fa fa-rocket"></i> <strong>125GB</strong> of Storage</p> -->
+                                            <!-- <p><i class="fa fa-database"></i> <strong>140</strong> Databases</p> -->
+                                            <!-- <p><i class="fa fa-link"></i> <strong>60</strong> Domains</p> -->
+                                            <!-- <p><i class="fa fa-life-ring"></i> <strong>24/7 Unlimited</strong> Support</p> -->
+                                        <!-- </div> -->
+                                        <!-- <div class="pricing-table-sign-up"> -->
+                                            <!-- <a href="#" class="hover-btn-new"><span>Order Now</span></a> -->
+                                        <!-- </div> -->
+                                    <!-- </div> -->
+                                <!-- </div> -->
+                                <!-- <div class="col-md-4"> -->
+                                    <!-- <div class="pricing-table pricing-table-highlighted"> -->
+                                        <!-- <div class="pricing-table-header grd1"> -->
+                                            <!-- <h2>WordPress Hosting</h2> -->
+                                            <!-- <h3>$59/Year</h3> -->
+                                        <!-- </div> -->
+                                        <!-- <div class="pricing-table-space"></div> -->
+                                        <!-- <div class="pricing-table-features"> -->
+                                            <!-- <p><i class="fa fa-envelope-o"></i> <strong>150</strong> Email Addresses</p> -->
+                                            <!-- <p><i class="fa fa-rocket"></i> <strong>65GB</strong> of Storage</p> -->
+                                            <!-- <p><i class="fa fa-database"></i> <strong>60</strong> Databases</p> -->
+                                            <!-- <p><i class="fa fa-link"></i> <strong>30</strong> Domains</p> -->
+                                            <!-- <p><i class="fa fa-life-ring"></i> <strong>24/7 Unlimited</strong> Support</p> -->
+                                        <!-- </div> -->
+                                        <!-- <div class="pricing-table-sign-up"> -->
+                                            <!-- <a href="#" class="hover-btn-new"><span>Order Now</span></a> -->
+                                        <!-- </div> -->
+                                    <!-- </div> -->
+                                <!-- </div> -->
+
+                                <!-- <div class="col-md-4"> -->
+                                    <!-- <div class="pricing-table pricing-table-highlighted"> -->
+                                        <!-- <div class="pricing-table-header grd1"> -->
+                                            <!-- <h2>Reseller Hosting</h2> -->
+                                            <!-- <h3>$85/Year</h3> -->
+                                        <!-- </div> -->
+                                        <!-- <div class="pricing-table-space"></div> -->
+                                        <!-- <div class="pricing-table-features"> -->
+                                            <!-- <p><i class="fa fa-envelope-o"></i> <strong>250</strong> Email Addresses</p> -->
+                                            <!-- <p><i class="fa fa-rocket"></i> <strong>125GB</strong> of Storage</p> -->
+                                            <!-- <p><i class="fa fa-database"></i> <strong>140</strong> Databases</p> -->
+                                            <!-- <p><i class="fa fa-link"></i> <strong>60</strong> Domains</p> -->
+                                            <!-- <p><i class="fa fa-life-ring"></i> <strong>24/7 Unlimited</strong> Support</p> -->
+                                        <!-- </div> -->
+                                        <!-- <div class="pricing-table-sign-up"> -->
+                                            <!-- <a href="#" class="hover-btn-new"><span>Order Now</span></a> -->
+                                        <!-- </div> -->
+                                    <!-- </div> -->
+                                <!-- </div> -->
+                            <!-- </div><!-- end row --> -->
+                        <!-- </div><!-- end pane --> -->
+                    <!-- </div><!-- end content --> -->
+                <!-- </div><!-- end col --> -->
+            <!-- </div><!-- end row --> -->
+        <!-- </div><!-- end container --> -->
+    <!-- </div><!-- end section --> -->
+
+	<div id="testimonials" class="parallax section db parallax-off" style="background-image:url('images/parallax_04.jpg');">
+		<div class="container">
+
+			<div class="section-title text-center">
+				<h3>Referanslarımız</h3>
+				<p>
+					Hizmet verdiğimiz kurum ve iş ortaklarımızın memnuniyeti,
+					en büyük referansımızdır.
+				</p>
+			</div>
+
+			<div class="row">
+				<div class="col-md-12">
+					<div class="testi-carousel owl-carousel owl-theme">
+
+						<!-- REFERANS 1 -->
+						<div class="testimonial clearfix">
+							<div class="desc">
+								<h3><i class="fa fa-quote-left"></i> Profesyonel Yaklaşım</h3>
+								<p class="lead">
+									Sahil Plan Proje ile gerçekleştirdiğimiz altyapı çalışmaları
+									zamanında ve eksiksiz tamamlandı. Güvenilir bir ekip.
+								</p>
+							</div>
+							<div class="testi-meta">
+								<img src="images/testi_01.png" class="img-fluid">
+								<h4>Belediye Proje Birimi</h4>
+							</div>
+						</div>
+
+						<!-- REFERANS 2 -->
+						<div class="testimonial clearfix">
+							<div class="desc">
+								<h3><i class="fa fa-quote-left"></i> Kaliteli Hizmet</h3>
+								<p class="lead">
+									İmar planlama sürecinde detaylı analizleri ve hızlı çözümleri
+									ile beklentimizin üzerinde hizmet aldık.
+								</p>
+							</div>
+							<div class="testi-meta">
+								<img src="images/testi_02.png" class="img-fluid">
+								<h4>Özel Sektör Yatırımcısı</h4>
+							</div>
+						</div>
+
+						<!-- REFERANS 3 -->
+						<div class="testimonial clearfix">
+							<div class="desc">
+								<h3><i class="fa fa-quote-left"></i> Güvenilir Partner</h3>
+								<p class="lead">
+									Proje danışmanlığı sürecinde her aşamada yanımızda olan
+									profesyonel bir ekip ile çalıştık.
+								</p>
+							</div>
+							<div class="testi-meta">
+								<img src="images/testi_03.png" class="img-fluid">
+								<h4>İnşaat Firması</h4>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+    <div class="parallax section dbcolor">
+        <div class="container">
+            <div class="row logos">
+                <div class="col-md-2 col-sm-2 col-xs-6 wow fadeInUp">
+                    <a href="#"><img src="images/logo_01.png" alt="" class="img-repsonsive"></a>
+                </div>
+                <div class="col-md-2 col-sm-2 col-xs-6 wow fadeInUp">
+                    <a href="#"><img src="images/logo_02.png" alt="" class="img-repsonsive"></a>
+                </div>
+                <div class="col-md-2 col-sm-2 col-xs-6 wow fadeInUp">
+                    <a href="#"><img src="images/logo_03.png" alt="" class="img-repsonsive"></a>
+                </div>
+                <div class="col-md-2 col-sm-2 col-xs-6 wow fadeInUp">
+                    <a href="#"><img src="images/logo_04.png" alt="" class="img-repsonsive"></a>
+                </div>
+                <div class="col-md-2 col-sm-2 col-xs-6 wow fadeInUp">
+                    <a href="#"><img src="images/logo_05.png" alt="" class="img-repsonsive"></a>
+                </div>
+                <div class="col-md-2 col-sm-2 col-xs-6 wow fadeInUp">
+                    <a href="#"><img src="images/logo_06.png" alt="" class="img-repsonsive"></a>
+                </div>
+            </div><!-- end row -->
+        </div><!-- end container -->
+    </div><!-- end section -->
+
+	<footer class="footer">
+		<div class="container">
+			<div class="row">
+
+				<!-- HAKKIMIZDA -->
+				<div class="col-lg-4 col-md-4 col-xs-12">
+					<div class="widget clearfix">
+						<div class="widget-title">
+							<h3>Sahil Plan Proje</h3>
+						</div>
+						<p>
+							Sahil Plan Proje, şehir planlama, altyapı mühendisliği ve
+							proje danışmanlığı alanlarında profesyonel çözümler sunar.
+						</p>
+						<p>
+							Sürdürülebilir ve uygulanabilir projeler ile geleceği planlıyoruz.
+						</p>
+					</div>
+				</div>
+
+				<!-- MENÜ -->
+				<div class="col-lg-4 col-md-4 col-xs-12">
+					<div class="widget clearfix">
+						<div class="widget-title">
+							<h3>Hızlı Menü</h3>
+						</div>
+						<ul class="footer-links">
+							<li><a href="#">Anasayfa</a></li>
+							<li><a href="#">Hakkımızda</a></li>
+							<li><a href="#">Hizmetler</a></li>
+							<li><a href="#">Projeler</a></li>
+							<li><a href="#">İletişim</a></li>
+						</ul>
+					</div>
+				</div>
+
+				<!-- İLETİŞİM -->
+				<div class="col-lg-4 col-md-4 col-xs-12">
+					<div class="widget clearfix">
+						<div class="widget-title">
+							<h3>İletişim</h3>
+						</div>
+
+						<ul class="footer-links">
+							<li><a href="mailto:info@sahilplanproje.com">info@sahilplanproje.com</a></li>
+							<li><a href="#">www.sahilplanproje.com</a></li>
+							<li>Muratpaşa / Antalya</li>
+							<li>+90 XXX XXX XX XX</li>
+						</ul>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</footer>
+	<div class="copyrights">
+		<div class="container">
+			<div class="footer-distributed">
+
+				<div class="footer-left">                   
+					<p class="footer-company-name">
+						© 2026 Sahil Plan Proje | Tüm Hakları Saklıdır
+					</p>
+				</div>
+
+				<div class="footer-right">
+					<ul class="footer-links-soi">
+						<li><a href="#"><i class="fa fa-facebook"></i></a></li>
+						<li><a href="#"><i class="fa fa-instagram"></i></a></li>
+						<li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+					</ul>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+    <a href="#" id="scroll-to-top" class="dmtop global-radius"><i class="fa fa-angle-up"></i></a>
+
+    <!-- ALL JS FILES -->
+    <script src="js/all.js"></script>
+    <!-- ALL PLUGINS -->
+    <script src="js/custom.js"></script>
+	<script src="js/timeline.min.js"></script>
+	<script>
+		timeline(document.querySelectorAll('.timeline'), {
+			forceVerticalMode: 700,
+			mode: 'horizontal',
+			verticalStartPosition: 'left',
+			visibleItems: 4
+		});
+	</script>
+</body>
+</html>

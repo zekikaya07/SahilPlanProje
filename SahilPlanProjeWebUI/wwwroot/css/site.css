@@ -1,0 +1,89 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.detail-btn:hover {
+    background: #9acb52 !important;
+    border-color: #9acb52 !important;
+}
+
+    .detail-btn:hover span {
+        color: #fff !important;
+    }
+
+.tahakkuk-buttons{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:15px;
+
+    margin-top:25px;
+
+    flex-wrap:wrap;
+}
+
+.hesapla-btn:hover{
+
+    background:#1f3c88 !important;
+
+    border-color:#1f3c88 !important;
+}
+
+.hesapla-btn:hover span{
+
+    color:#fff !important;
+}
+
+.hesap-sonuc-box{
+
+    margin-top:35px;
+
+    background:#f8fafc;
+
+    border-radius:14px;
+
+    padding:30px;
+
+    border-left:5px solid #8cc63f;
+
+    box-shadow:0 8px 25px rgba(0,0,0,0.08);
+}
+
+.hesap-sonuc-box h3{
+
+    color:#1f3c88;
+
+    margin-bottom:20px;
+}
+
+#sonucFiyat{
+
+    color:#8cc63f;
+
+    font-size:42px;
+
+    font-weight:700;
+
+    text-align:center;
+}

@@ -1,0 +1,15 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+@await Component.InvokeAsync("_HeadDefaultComponentPartial")
+<body>
+
+    @await Component.InvokeAsync("_BodyDefaultComponentPartial")
+    @await Component.InvokeAsync("_FooterDefaultComponentPartial")
+
+</body>
+
+</html>

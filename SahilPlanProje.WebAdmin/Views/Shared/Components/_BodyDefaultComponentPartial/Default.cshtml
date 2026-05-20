@@ -1,0 +1,727 @@
+﻿<div class="app-container">
+    <div class="sidebar">
+        <div class="sidebar-header"><h2><i class="fas fa-charging-station"></i> <span>Tahakkuk ERP</span></h2></div>
+        <div class="nav-menu">
+            <div class="nav-item" data-module="cities"><i class="fas fa-city"></i><span>İller</span></div>
+            <div class="nav-item" data-module="districts"><i class="fas fa-map-marker-alt"></i><span>İlçeler</span></div>
+            <div class="nav-item" data-module="tahakkukYears"><i class="fas fa-calendar-alt"></i><span>Tahakkuk Yılları</span></div>
+            <div class="nav-item" data-module="institutions"><i class="fas fa-building"></i><span>Kurumlar</span></div>
+            <div class="nav-item" data-module="departments"><i class="fas fa-sitemap"></i><span>Daire Başkanlıkları</span></div>
+            <div class="nav-item" data-module="directorates"><i class="fas fa-user-tie"></i><span>Müdürlükler</span></div>
+            <div class="nav-item" data-module="scales"><i class="fas fa-ruler-combined"></i><span>Ölçekler</span></div>
+            <div class="nav-item" data-module="feeSubjects"><i class="fas fa-tags"></i><span>Ücret Konuları</span></div>
+            <div class="nav-item" data-module="definitions"><i class="fas fa-file-invoice-dollar"></i><span>Tahakkuk Tanımları</span></div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="top-bar">
+            <h1 class="page-title" id="current-module-title">İl Yönetimi</h1>
+            <div><i class="fas fa-database"></i> <span id="record-count">0 kayıt</span></div>
+        </div>
+        <div class="dual-pane">
+            <div class="list-pane">
+                <div class="section-header">
+                    <span><i class="fas fa-list-ul"></i> Kayıt Listesi</span>
+                    <button id="refreshListBtn" style="background:#eef2ff; color:#2563eb;"><i class="fas fa-sync-alt"></i> Yenile</button>
+                </div>
+                <div id="listContainer"><div class="empty-msg">Yükleniyor...</div></div>
+            </div>
+            <div class="form-pane">
+                <div class="section-header">
+                    <span><i class="fas fa-pen-alt"></i> <span id="formTitle">Yeni Kayıt Ekle</span></span>
+                    <button id="clearFormBtn" class="btn-secondary"><i class="fas fa-eraser"></i> Temizle</button>
+                </div>
+                <form id="dataForm">
+                    <input type="hidden" id="editId" value="">
+                    <div id="dynamicFormFields"></div>
+                    <div style="display: flex; gap: 12px; margin-top: 20px;">
+                        <button type="submit" id="saveBtn"><i class="fas fa-save"></i> Kaydet</button>
+                        <button type="button" id="deleteBtn" class="danger"><i class="fas fa-trash"></i> Sil</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const API_BASE_URL = "https://api.sahilplanproje.com/api";
+
+    const apiConfig = {
+        cities: {
+            title: "İller",
+            listUrl: "/Cities",
+            //getUrl: "/Cities/GetFeature/{id}",
+            getUrl: "/Cities/GetFeature?id={id}",
+            createUrl: "/Cities",
+            updateUrl: "/Cities",
+            deleteUrl: "/Cities/{id}",
+            fields: ["code", "plate_code", "name", "country_code", "is_active"],
+            labels: {
+                code: "Kod",
+                plate_code: "Plaka",
+                name: "İl Adı",
+                country_code: "Ülke Kodu",
+                is_active: "Aktif"
+            }
+        },
+
+        districts: {
+            title: "İlçeler",
+            listUrl: "/Districts",
+            getUrl: "/Districts/{id}",
+            createUrl: "/Districts",
+            updateUrl: "/Districts/{id}",
+            deleteUrl: "/Districts/{id}",
+            fields: ["city_id", "code", "district_no", "name", "is_central", "is_active"],
+            labels: {
+                city_id: "İl Id",
+                code: "İlçe Kodu",
+                district_no: "İlçe No",
+                name: "İlçe Adı",
+                is_central: "Merkez",
+                is_active: "Aktif"
+            }
+        },
+        tahakkukYears: {
+            title: "Tahakkuk Yılları",
+            listUrl: "/TahakkukYears",
+            getUrl: "/TahakkukYears/{id}",
+            createUrl: "/TahakkukYears",
+            updateUrl: "/TahakkukYears/{id}",
+            deleteUrl: "/TahakkukYears/{id}",
+            fields: ["district_id", "year", "is_active"],
+            labels: {
+                district_id: "İlçe Id",
+                year: "Yıl",
+                is_active: "Aktif"
+            }
+        },
+        institutions: {
+            title: "Kurumlar",
+            listUrl: "/TahakkukInstitutions",
+            getUrl: "/TahakkukInstitutions/{id}",
+            createUrl: "/TahakkukInstitutions",
+            updateUrl: "/TahakkukInstitutions/{id}",
+            deleteUrl: "/TahakkukInstitutions/{id}",
+            fields: ["tahakkuk_year_id", "name", "is_active"],
+            labels: {
+                tahakkuk_year_id: "Tahakkuk Yılı Id",
+                name: "Kurum Adı",
+                is_active: "Aktif"
+            }
+        },
+        departments: {
+            title: "Daire Başkanlıkları",
+            listUrl: "/TahakkukDepartments",
+            getUrl: "/TahakkukDepartments/{id}",
+            createUrl: "/TahakkukDepartments",
+            updateUrl: "/TahakkukDepartments/{id}",
+            deleteUrl: "/TahakkukDepartments/{id}",
+            fields: ["tahakkuk_institution_id", "name", "is_active"],
+            labels: {
+                tahakkuk_institution_id: "Kurum Id",
+                name: "Daire Adı",
+                is_active: "Aktif"
+            }
+        },
+        directorates: {
+            title: "Müdürlükler",
+            listUrl: "/TahakkukDirectorates",
+            getUrl: "/TahakkukDirectorates/{id}",
+            createUrl: "/TahakkukDirectorates",
+            updateUrl: "/TahakkukDirectorates/{id}",
+            deleteUrl: "/TahakkukDirectorates/{id}",
+            fields: ["tahakkuk_department_id", "name", "is_active"],
+            labels: {
+                tahakkuk_department_id: "Daire Id",
+                name: "Müdürlük Adı",
+                is_active: "Aktif"
+            }
+        },
+        scales: {
+            title: "Ölçekler",
+            listUrl: "/TahakkukScales",
+            getUrl: "/TahakkukScales/{id}",
+            createUrl: "/TahakkukScales",
+            updateUrl: "/TahakkukScales/{id}",
+            deleteUrl: "/TahakkukScales/{id}",
+            fields: ["tahakkuk_directorate_id", "scale_value", "name", "is_active"],
+            labels: {
+                tahakkuk_directorate_id: "Müdürlük Id",
+                scale_value: "Ölçek Değeri",
+                name: "Ölçek Adı",
+                is_active: "Aktif"
+            }
+        },
+        feeSubjects: {
+            title: "Ücret Konuları",
+            listUrl: "/TahakkukFeeSubjects",
+            getUrl: "/TahakkukFeeSubjects/{id}",
+            createUrl: "/TahakkukFeeSubjects",
+            updateUrl: "/TahakkukFeeSubjects/{id}",
+            deleteUrl: "/TahakkukFeeSubjects/{id}",
+            fields: ["tahakkuk_directorate_id", "name", "is_active"],
+            labels: {
+                tahakkuk_directorate_id: "Müdürlük Id",
+                name: "Ücret Konusu",
+                is_active: "Aktif"
+            }
+        },
+        definitions: {
+            title: "Tahakkuk Tanımları",
+            listUrl: "/TahakkukDefinitions",
+            getUrl: "/TahakkukDefinitions/{id}",
+            createUrl: "/TahakkukDefinitions",
+            updateUrl: "/TahakkukDefinitions/{id}",
+            deleteUrl: "/TahakkukDefinitions/{id}",
+            fields: ["tahakkuk_fee_subject_id", "tahakkuk_fee_sub_subject_id", "fee_text", "fee_amount", "has_vat", "description1", "description2", "is_active"],
+            labels: {
+                tahakkuk_fee_subject_id: "Ücret Konusu Id",
+                tahakkuk_fee_sub_subject_id: "Ücret Alt Konusu Id",
+                fee_text: "Ücret Metni",
+                fee_amount: "Tutar",
+                has_vat: "KDV Var",
+                description1: "Açıklama 1",
+                description2: "Açıklama 2",
+                is_active: "Aktif"
+            }
+        }
+    };
+
+    let currentModule = "cities";
+    let currentRecords = [];
+
+    function buildUrl(url, id = null) {
+        let result = API_BASE_URL + url;
+        if (id !== null) {
+            result = result.replace("{id}", id);
+        }
+        return result;
+    }
+
+ async function apiRequest(url, method = "GET", data = null) {
+    const options = {
+        method: method
+    };
+
+    if (data !== null) {
+        options.headers = {
+            "Content-Type": "application/json"
+        };
+        options.body = JSON.stringify(data);
+    }
+
+    const response = await fetch(url, options);
+
+    if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText || "API isteği başarısız oldu.");
+    }
+
+    if (response.status === 204) {
+        return null;
+    }
+
+    return await response.json();
+}
+    async function loadRecords() {
+        const config = apiConfig[currentModule];
+
+        document.getElementById("listContainer").innerHTML =
+            "<div class='empty-msg'>Yükleniyor...</div>";
+
+        document.getElementById("current-module-title").innerText =
+            config.title + " Yönetimi";
+
+        try {
+            const url = buildUrl(config.listUrl);
+            const result = await apiRequest(url);
+
+            currentRecords = Array.isArray(result) ? result : result.data || [];
+
+            renderList();
+            document.getElementById("record-count").innerText =
+                currentRecords.length + " kayıt";
+        } catch (error) {
+            document.getElementById("listContainer").innerHTML =
+                "<div class='empty-msg'>Listeleme hatası: " + error.message + "</div>";
+        }
+
+            console.log(result);
+    console.log(currentRecords);
+    }
+
+        function renderList() {
+            console.log("Render Records", currentRecords);
+        const config = apiConfig[currentModule];
+        const container = document.getElementById("listContainer");
+
+        if (currentRecords.length === 0) {
+            container.innerHTML = "<div class='empty-msg'>Kayıt bulunamadı.</div>";
+            return;
+        }
+
+        const displayFields = config.fields.filter(x => x !== "is_active");
+
+        let html = `
+            <table class="entity-table">
+                <thead>
+                    <tr>
+                        ${displayFields.map(f => `<th>${config.labels[f] || f}</th>`).join("")}
+                        <th>Durum</th>
+                        <th>İşlem</th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+
+        currentRecords.forEach(item => {
+            html += `
+                <tr class="record-row" data-id="${item.id}">
+                    ${displayFields.map(f => `<td>${item[f] ?? "-"}</td>`).join("")}
+                    <td>
+                        ${
+                            item.is_active
+                                ? "<span class='badge-active'>Aktif</span>"
+                                : "<span class='badge-active badge-inactive'>Pasif</span>"
+                        }
+                    </td>
+                    <td class="action-icons">
+                        <i class="fas fa-edit edit-icon" data-id="${item.id}"></i>
+                        <i class="fas fa-trash-alt delete-icon" data-id="${item.id}"></i>
+                    </td>
+                </tr>
+            `;
+        });
+
+        html += "</tbody></table>";
+        container.innerHTML = html;
+
+        document.querySelectorAll(".edit-icon").forEach(icon => {
+            icon.addEventListener("click", function (e) {
+                e.stopPropagation();
+                loadToForm(this.dataset.id);
+            });
+        });
+
+        document.querySelectorAll(".delete-icon").forEach(icon => {
+            icon.addEventListener("click", function (e) {
+                e.stopPropagation();
+                deleteRecord(this.dataset.id);
+            });
+        });
+
+        document.querySelectorAll(".record-row").forEach(row => {
+            row.addEventListener("click", function () {
+                loadToForm(this.dataset.id);
+            });
+        });
+    }
+
+    async function loadToForm(id) {
+        const config = apiConfig[currentModule];
+
+        try {
+            const url = buildUrl(config.getUrl, id);
+            const record = await apiRequest(url);
+
+            document.getElementById("editId").value = record.id;
+            document.getElementById("formTitle").innerText = "Kaydı Güncelle";
+
+            generateFormFields(record);
+        } catch (error) {
+            alert("Kayıt getirme hatası: " + error.message);
+        }
+    }
+
+    function generateFormFields(record = null) {
+        const config = apiConfig[currentModule];
+        const fieldsDiv = document.getElementById("dynamicFormFields");
+
+        let html = "";
+
+        config.fields.forEach(field => {
+            const label = config.labels[field] || field;
+            const value = record ? record[field] : "";
+
+            if (field === "is_active" || field === "has_vat" || field === "is_central") {
+                const checked = record ? (record[field] ? "checked" : "") : "checked";
+
+                html += `
+                    <div class="form-group">
+                        <label>${label}</label>
+                        <input type="checkbox" id="field_${field}" ${checked}>
+                    </div>
+                `;
+            }
+            else if (field.includes("_id")) {
+                html += `
+                    <div class="form-group">
+                        <label>${label}</label>
+                        <input type="number" id="field_${field}" value="${value ?? ""}">
+                    </div>
+                `;
+            }
+            else if (field === "fee_amount") {
+                html += `
+                    <div class="form-group">
+                        <label>${label}</label>
+                        <input type="number" step="0.01" id="field_${field}" value="${value ?? ""}">
+                    </div>
+                `;
+            }
+            else if (field === "description1" || field === "description2") {
+                html += `
+                    <div class="form-group">
+                        <label>${label}</label>
+                        <textarea id="field_${field}">${value ?? ""}</textarea>
+                    </div>
+                `;
+            }
+            else {
+                html += `
+                    <div class="form-group">
+                        <label>${label}</label>
+                        <input type="text" id="field_${field}" value="${value ?? ""}">
+                    </div>
+                `;
+            }
+        });
+
+        fieldsDiv.innerHTML = html;
+    }
+
+    function getFormData() {
+        const config = apiConfig[currentModule];
+        const data = {};
+
+        config.fields.forEach(field => {
+            const el = document.getElementById("field_" + field);
+            if (!el) return;
+
+            if (el.type === "checkbox") {
+                data[field] = el.checked;
+            }
+            else if (el.type === "number") {
+                data[field] = el.value === "" ? null : Number(el.value);
+            }
+            else {
+                data[field] = el.value;
+            }
+        });
+
+        return data;
+    }
+
+    async function saveRecord() {
+        const config = apiConfig[currentModule];
+        const editId = document.getElementById("editId").value;
+        const data = getFormData();
+
+        try {
+            if (editId) {
+                const url = buildUrl(config.updateUrl, editId);
+                await apiRequest(url, "PUT", data);
+                alert("Kayıt güncellendi.");
+            } else {
+                const url = buildUrl(config.createUrl);
+                await apiRequest(url, "POST", data);
+                alert("Kayıt eklendi.");
+            }
+
+            clearForm();
+            await loadRecords();
+        } catch (error) {
+            alert("Kaydetme hatası: " + error.message);
+        }
+    }
+
+    async function deleteRecord(id) {
+        const config = apiConfig[currentModule];
+
+        if (!confirm("Bu kayıt silinsin mi?")) {
+            return;
+        }
+
+        try {
+            const url = buildUrl(config.deleteUrl, id);
+            await apiRequest(url, "DELETE");
+
+            alert("Kayıt silindi.");
+            clearForm();
+            await loadRecords();
+        } catch (error) {
+            alert("Silme hatası: " + error.message);
+        }
+    }
+
+    function clearForm() {
+        document.getElementById("editId").value = "";
+        document.getElementById("formTitle").innerText = "Yeni Kayıt Ekle";
+        generateFormFields(null);
+    }
+
+    function switchModule(moduleName) {
+        currentModule = moduleName;
+
+        document.querySelectorAll(".nav-item").forEach(x => x.classList.remove("active"));
+        document.querySelector(`.nav-item[data-module="${moduleName}"]`)?.classList.add("active");
+
+        clearForm();
+        loadRecords();
+    }
+
+    document.querySelectorAll(".nav-item").forEach(item => {
+        item.addEventListener("click", function () {
+            switchModule(this.dataset.module);
+        });
+    });
+
+    document.getElementById("refreshListBtn").addEventListener("click", function () {
+        loadRecords();
+    });
+
+    document.getElementById("clearFormBtn").addEventListener("click", function () {
+        clearForm();
+    });
+
+    document.getElementById("dataForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+        saveRecord();
+    });
+
+    document.getElementById("deleteBtn").addEventListener("click", function () {
+        const id = document.getElementById("editId").value;
+
+        if (!id) {
+            alert("Silmek için önce listeden kayıt seçin.");
+            return;
+        }
+
+        deleteRecord(id);
+    });
+
+    switchModule("cities");
+</script>
+@* <script>
+    // ======================== TAM MOCK VERİTABANI (ÖLÇEK DAHİL) ========================
+    let db = {
+        cities: [
+            { id: 1, code: "TR34", plate_code: "34", name: "İstanbul", country_code: "TR", is_active: true, create_date: "2024-01-01" },
+            { id: 2, code: "TR06", plate_code: "06", name: "Ankara", country_code: "TR", is_active: true, create_date: "2024-01-01" }
+        ],
+        districts: [
+            { id: 1, city_id: 1, code: "341", district_no: "1", name: "Kadıköy", is_central: false, is_active: true, create_date: "2024-01-10" },
+            { id: 2, city_id: 1, code: "342", district_no: "2", name: "Beşiktaş", is_central: true, is_active: true, create_date: "2024-01-10" },
+            { id: 3, city_id: 2, code: "061", district_no: "1", name: "Çankaya", is_central: true, is_active: true, create_date: "2024-01-10" }
+        ],
+        tahakkukYears: [
+            { id: 1, district_id: 1, year: 2025, is_active: true, create_date: "2024-02-01" },
+            { id: 2, district_id: 2, year: 2025, is_active: true, create_date: "2024-02-01" },
+            { id: 3, district_id: 3, year: 2024, is_active: false, create_date: "2024-02-01" }
+        ],
+        tahakkukInstitutions: [
+            { id: 1, tahakkuk_year_id: 1, name: "Kadıköy Belediyesi", is_active: true, create_date: "2024-03-01" },
+            { id: 2, tahakkuk_year_id: 2, name: "Beşiktaş Belediyesi", is_active: true, create_date: "2024-03-01" }
+        ],
+        tahakkukDepartments: [
+            { id: 1, tahakkuk_institution_id: 1, name: "Mali Hizmetler Daire Başkanlığı", is_active: true, create_date: "2024-03-10" },
+            { id: 2, tahakkuk_institution_id: 1, name: "Vergi Daire Başkanlığı", is_active: true, create_date: "2024-03-10" }
+        ],
+        tahakkukDirectories: [
+            { id: 1, tahakkuk_department_id: 1, name: "Gelir Müdürlüğü", is_active: true, create_date: "2024-04-01" },
+            { id: 2, tahakkuk_department_id: 2, name: "Emlak Vergisi Müdürlüğü", is_active: true, create_date: "2024-04-01" }
+        ],
+        // ** ÖLÇEKLER TABLOSU (ER'deki TahakkukScales) **
+        tahakkukScales: [
+            { id: 1, tahakkuk_directorate_id: 1, scale_value: "1", name: "1. Ölçek (Düşük)", is_active: true, create_date: "2024-04-15" },
+            { id: 2, tahakkuk_directorate_id: 1, scale_value: "2", name: "2. Ölçek (Orta)", is_active: true, create_date: "2024-04-15" },
+            { id: 3, tahakkuk_directorate_id: 2, scale_value: "A", name: "A Sınıfı (Yüksek)", is_active: true, create_date: "2024-04-15" }
+        ],
+        tahakkukFeeSubjects: [
+            { id: 1, tahakkuk_directorate_id: 1, name: "Çevre Temizlik Vergisi", is_active: true, create_date: "2024-05-01" },
+            { id: 2, tahakkuk_directorate_id: 2, name: "Emlak Vergisi", is_active: true, create_date: "2024-05-01" }
+        ],
+        tahakkukDefinitions: [
+            { id: 1, tahakkuk_fee_subject_id: 1, fee_text: "Konut ÇTV", fee_amount: 350.00, has_vat: true, description1: "Aylık", description2: "Konutlar", is_active: true },
+            { id: 2, tahakkuk_fee_subject_id: 2, fee_text: "Mesken Emlak", fee_amount: 1200.00, has_vat: false, description1: "Yıllık", description2: "Bina", is_active: true }
+        ]
+    };
+
+    let currentModule = "cities";
+    let currentRecords = [];
+
+    // Tüm modül şemaları (Scales eklendi, FeeSubjects artık müdürlük+ölçek bağlantısı ER'de feeSubjects -> directorate, scales -> directorate)
+    // NOT: ER'de TahakkukFeeSubjects, TahakkukDirectories ile FK; TahakkukScales da TahakkukDirectories ile FK. Her ikisi de müdürlüğe bağlı.
+    const moduleSchemas = {
+        cities: { name:"İller", fields: ["code","plate_code","name","country_code","is_active"], labels: {code:"Kod",plate_code:"Plaka",name:"İl Adı",country_code:"Ülke",is_active:"Aktif"} },
+        districts: { name:"İlçeler", fields: ["city_id","code","district_no","name","is_central","is_active"], labels: {city_id:"İl",code:"İlçe Kodu",district_no:"No",name:"İlçe Adı",is_central:"Merkez",is_active:"Aktif"}, foreign:{city_id:{table:"cities",label:"name",value:"id"}} },
+        tahakkukYears: { name:"Tahakkuk Yılları", fields: ["district_id","year","is_active"], labels: {district_id:"İlçe",year:"Yıl",is_active:"Aktif"}, foreign:{district_id:{table:"districts",label:"name",value:"id"}} },
+        institutions: { name:"Kurumlar", fields: ["tahakkuk_year_id","name","is_active"], labels: {tahakkuk_year_id:"Tahakkuk Yılı",name:"Kurum Adı",is_active:"Aktif"}, foreign:{tahakkuk_year_id:{table:"tahakkukYears",label:"year",value:"id"}} },
+        departments: { name:"Daire Başkanlıkları", fields: ["tahakkuk_institution_id","name","is_active"], labels: {tahakkuk_institution_id:"Kurum",name:"Daire Adı",is_active:"Aktif"}, foreign:{tahakkuk_institution_id:{table:"tahakkukInstitutions",label:"name",value:"id"}} },
+        directorates: { name:"Müdürlükler", fields: ["tahakkuk_department_id","name","is_active"], labels: {tahakkuk_department_id:"Daire Başkanlığı",name:"Müdürlük Adı",is_active:"Aktif"}, foreign:{tahakkuk_department_id:{table:"tahakkukDepartments",label:"name",value:"id"}} },
+        scales: { name:"Ölçekler", fields: ["tahakkuk_directorate_id","scale_value","name","is_active"], labels: {tahakkuk_directorate_id:"Müdürlük",scale_value:"Ölçek Değeri",name:"Ölçek Adı",is_active:"Aktif"}, foreign:{tahakkuk_directorate_id:{table:"tahakkukDirectories",label:"name",value:"id"}} },
+        feeSubjects: { name:"Ücret Konuları", fields: ["tahakkuk_directorate_id","name","is_active"], labels: {tahakkuk_directorate_id:"Müdürlük",name:"Ücret Konusu",is_active:"Aktif"}, foreign:{tahakkuk_directorate_id:{table:"tahakkukDirectories",label:"name",value:"id"}} },
+        definitions: { name:"Ücret Tanımları", fields: ["tahakkuk_fee_subject_id","fee_text","fee_amount","has_vat","description1","description2","is_active"], labels: {tahakkuk_fee_subject_id:"Ücret Konusu",fee_text:"Ücret Metni",fee_amount:"Tutar",has_vat:"KDV",description1:"Açıklama1",description2:"Açıklama2",is_active:"Aktif"}, foreign:{tahakkuk_fee_subject_id:{table:"tahakkukFeeSubjects",label:"name",value:"id"}} }
+    };
+
+    function getTableName(module) {
+        const mapping = {
+            cities:"cities", districts:"districts", tahakkukYears:"tahakkukYears",
+            institutions:"tahakkukInstitutions", departments:"tahakkukDepartments",
+            directorates:"tahakkukDirectories", scales:"tahakkukScales",
+            feeSubjects:"tahakkukFeeSubjects", definitions:"tahakkukDefinitions"
+        };
+        return mapping[module];
+    }
+
+    function loadRecords() {
+        const table = getTableName(currentModule);
+        if(!table) return;
+        currentRecords = [...db[table]];
+        renderList();
+        document.getElementById("record-count").innerText = currentRecords.length + " kayıt";
+        document.getElementById("current-module-title").innerText = moduleSchemas[currentModule]?.name + " Yönetimi";
+    }
+
+    function renderList() {
+        const container = document.getElementById("listContainer");
+        const schema = moduleSchemas[currentModule];
+        if(!schema){ container.innerHTML="<div class='empty-msg'>Hata</div>"; return; }
+        if(currentRecords.length === 0){
+            container.innerHTML="<div class='empty-msg'><i class='fas fa-database'></i> Kayıt yok</div>";
+            return;
+        }
+        const displayFields = schema.fields.filter(f => f !== "is_active" && f !== "create_date");
+        const tableHtml = `<table class="entity-table"><thead><tr>${displayFields.map(f=>`<th>${schema.labels[f] || f}</th>`).join('')}<th>Durum</th><th></th></tr></thead><tbody>
+            ${currentRecords.map(rec => {
+                const rowVals = displayFields.map(f => {
+                    let val = rec[f];
+                    if(schema.foreign && schema.foreign[f]){
+                        const ref = schema.foreign[f];
+                        const targetTable = db[ref.table];
+                        const found = targetTable.find(t => t[ref.value] === val);
+                        val = found ? found[ref.label] : val;
+                    }
+                    return `<td>${val ?? "-"}</td>`;
+                }).join('');
+                const activeBadge = rec.is_active ? "<span class='badge-active'>Aktif</span>" : "<span class='badge-active badge-inactive'>Pasif</span>";
+                return `<tr class="record-row" data-id="${rec.id}">${rowVals}<td>${activeBadge}</td><td class="action-icons"><i class="fas fa-edit edit-icon" data-id="${rec.id}"></i> <i class="fas fa-trash-alt delete-icon" data-id="${rec.id}"></i></td></tr>`;
+            }).join('')}
+        </tbody></table>`;
+        container.innerHTML = tableHtml;
+        document.querySelectorAll('.edit-icon').forEach(icon => icon.addEventListener('click', (e) => { e.stopPropagation(); loadToForm(parseInt(icon.dataset.id)); }));
+        document.querySelectorAll('.delete-icon').forEach(icon => icon.addEventListener('click', (e) => { e.stopPropagation(); if(confirm("Silinsin mi?")) deleteRecordById(parseInt(icon.dataset.id)); }));
+        document.querySelectorAll('.record-row').forEach(row => row.addEventListener('click', (e) => { if(e.target.classList.contains('edit-icon')||e.target.classList.contains('delete-icon')) return; loadToForm(parseInt(row.dataset.id)); }));
+    }
+
+    function loadToForm(id){
+        const table = getTableName(currentModule);
+        const record = db[table].find(r => r.id === id);
+        if(!record) return;
+        document.getElementById("editId").value = id;
+        document.getElementById("formTitle").innerText = "Kaydı Güncelle";
+        generateFormFields(record);
+    }
+
+    function generateFormFields(existing = null){
+        const schema = moduleSchemas[currentModule];
+        const fieldsDiv = document.getElementById("dynamicFormFields");
+        let html = "";
+        for(let field of schema.fields){
+            let value = existing ? existing[field] : (field === "is_active" ? true : (field === "has_vat"? false : ""));
+            if(field === "create_date") continue;
+            if(schema.foreign && schema.foreign[field]){
+                const ref = schema.foreign[field];
+                const options = db[ref.table] || [];
+                html += `<div class="form-group"><label>${schema.labels[field]}</label><select name="${field}" id="field_${field}"><option value="">Seçiniz</option>`;
+                options.forEach(opt => {
+                    const selected = (value == opt[ref.value]) ? "selected" : "";
+                    html += `<option value="${opt[ref.value]}" ${selected}>${opt[ref.label]}</option>`;
+                });
+                html += `</select></div>`;
+            } else if(field === "is_active" || field === "has_vat"){
+                const checked = value ? "checked" : "";
+                html += `<div class="form-group"><label>${schema.labels[field]}</label><div><input type="checkbox" id="field_${field}" ${checked} /> Aktif/Pasif</div></div>`;
+            } else {
+                html += `<div class="form-group"><label>${schema.labels[field]}</label><input type="text" id="field_${field}" value="${value ?? ""}" /></div>`;
+            }
+        }
+        fieldsDiv.innerHTML = html;
+    }
+
+    function clearForm(){
+        document.getElementById("editId").value = "";
+        document.getElementById("formTitle").innerText = "Yeni Kayıt Ekle";
+        generateFormFields(null);
+    }
+
+    function getFormData(){
+        const schema = moduleSchemas[currentModule];
+        const data = {};
+        for(let field of schema.fields){
+            if(field === "create_date") continue;
+            const el = document.getElementById(`field_${field}`);
+            if(!el) continue;
+            if(el.type === "checkbox") data[field] = el.checked;
+            else if(el.tagName === "SELECT") data[field] = el.value ? (isNaN(parseInt(el.value))? el.value : parseInt(el.value)) : null;
+            else data[field] = el.value;
+        }
+        data.is_active = data.is_active !== undefined ? data.is_active : true;
+        if(data.fee_amount) data.fee_amount = parseFloat(data.fee_amount);
+        return data;
+    }
+
+    function saveRecord(){
+        const tableName = getTableName(currentModule);
+        const editId = document.getElementById("editId").value;
+        const formData = getFormData();
+        const nowDate = new Date().toISOString().slice(0,10);
+        if(editId){
+            const idx = db[tableName].findIndex(r => r.id == editId);
+            if(idx !== -1) db[tableName][idx] = { ...db[tableName][idx], ...formData };
+        } else {
+            const newId = db[tableName].length ? Math.max(...db[tableName].map(r=>r.id)) + 1 : 1;
+            db[tableName].push({ id: newId, ...formData, create_date: nowDate });
+        }
+        loadRecords();
+        clearForm();
+    }
+
+    function deleteRecordById(id){
+        const tableName = getTableName(currentModule);
+        const idx = db[tableName].findIndex(r=>r.id === id);
+        if(idx !== -1) db[tableName].splice(idx,1);
+        loadRecords();
+        clearForm();
+    }
+
+    function switchModule(module){
+        currentModule = module;
+        loadRecords();
+        clearForm();
+    }
+
+    // Event Listeners
+    document.querySelectorAll(".nav-item").forEach(item => {
+        item.addEventListener("click", () => {
+            document.querySelectorAll(".nav-item").forEach(n=>n.classList.remove("active"));
+            item.classList.add("active");
+            switchModule(item.dataset.module);
+        });
+    });
+    document.getElementById("refreshListBtn").addEventListener("click", ()=>loadRecords());
+    document.getElementById("clearFormBtn").addEventListener("click", ()=>clearForm());
+    document.getElementById("dataForm").addEventListener("submit", (e)=>{ e.preventDefault(); saveRecord(); });
+    document.getElementById("deleteBtn").addEventListener("click", ()=>{
+        const id = document.getElementById("editId").value;
+        if(id && confirm("Kalıcı olarak sil?")) deleteRecordById(parseInt(id));
+        else if(!id) alert("Silmek için listeden bir kayıt seçin.");
+    });
+
+    // Başlat
+    switchModule("cities");
+    document.querySelector('.nav-item[data-module="cities"]').classList.add("active");
+</script> *@

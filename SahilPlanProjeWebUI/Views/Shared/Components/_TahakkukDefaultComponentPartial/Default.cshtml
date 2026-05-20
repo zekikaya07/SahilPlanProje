@@ -1,0 +1,384 @@
+﻿@using System.Collections.Generic
+@using Newtonsoft.Json
+@model SahilPlanProje.WebUI.Dtos.TahakkukFilterOptionsDto
+
+<!-- Tahakkuk Hesaplama Alanı -->
+<div id="tahakkuk-hesaplama" class="section wb tahakkuk-section">
+    <div class="container">
+        <div class="col-lg-12">
+            <div class="customwidget text-center">
+                <div class="checkdomain-wrapper tahakkuk-wrapper">
+
+                    <h2>Tahakkuk Hesaplama Sistemi</h2>
+
+                    <p>
+                        İl, ilçe, kurum, müdürlük ve ölçek bilgilerini seçerek
+                        tahakkuk detaylarını görüntüleyebilirsiniz.
+                    </p>
+
+                    <br>
+
+                    <div class="row">
+
+                        <div class="col-md-4 mb-3">
+                            <select id="citySelect" class="form-control">
+                                <option value="">İl Seçiniz</option>
+
+                                @if (Model?.cities != null)
+                                {
+                                    foreach (var item in Model.cities)
+                                    {
+                                                <option value="@item.id">@item.name</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <select id="districtSelect" class="form-control">
+                                <option value="">İlçe Seçiniz</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <select id="institutionSelect" class="form-control">
+                                <option value="">Tahakkuk Kurumu</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <select id="departmentSelect" class="form-control">
+                                <option value="">Daire Başkanlığı</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <select id="directorateSelect" class="form-control">
+                                <option value="">Müdürlük</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <select id="scaleSelect" class="form-control">
+                                <option value="">Ölçek Seçiniz</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <select id="feeSubjectSelect" class="form-control">
+                                <option value="">Ücret Konusu Seçiniz</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <select id="feeSubSubjectSelect" class="form-control">
+                                <option value="">Ücret Alt Konusu Seçiniz</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <br>
+
+                    <ul class="list-inline">
+                        <li><i class="fa fa-check"></i> Belediye Tahakkukları</li>
+                        <li><i class="fa fa-check"></i> İmar Hizmetleri</li>
+                        <li><i class="fa fa-check"></i> Online Hesaplama</li>
+                    </ul>
+
+                    <a href="javascript:void(0)"
+                       onclick="calculateTahakkuk()"
+                       class="hover-btn-new tahakkuk-btn">
+                        <span>Hesapla</span>
+                    </a>
+
+                    <a href="#contact" class="hover-btn-new tahakkuk-btn">
+                        <span>Teklif / Bilgi Al</span>
+                    </a>
+
+                    <div id="hesaplamaSonuc" style="display:none; margin-top:25px;">
+                        <h3>Tahakkuk Sonucu</h3>
+
+                        <p><strong>İl:</strong> <span id="sonucIl"></span></p>
+                        <p><strong>İlçe:</strong> <span id="sonucIlce"></span></p>
+                        <p><strong>Kurum:</strong> <span id="sonucKurum"></span></p>
+                        <p><strong>Fiyat:</strong> <span id="sonucFiyat"></span></p>
+                        <p><strong>Ücret:</strong> <span id="fiyat"></span></p>
+
+                        <p><strong>Ücret Konusu:</strong> <span id="sonucUcretKonusu"></span></p>
+                        <p><strong>Ücret Alt Konusu:</strong> <span id="sonucUcretAltKonusu"></span></p>
+                        <p><strong>KDV:</strong> <span id="sonucKdv"></span></p>
+                        <p><strong>Açıklama 1:</strong> <span id="sonucAciklama1"></span></p>
+                        <p><strong>Açıklama 2:</strong> <span id="sonucAciklama2"></span></p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+        const districts = @Html.Raw(JsonConvert.SerializeObject(Model?.districts ?? new List<SahilPlanProje.WebUI.Dtos.DistrictOptionDto>()));
+        const years = @Html.Raw(JsonConvert.SerializeObject(Model?.years ?? new List<SahilPlanProje.WebUI.Dtos.YearOptionDto>()));
+        const institutions = @Html.Raw(JsonConvert.SerializeObject(Model?.institutions ?? new List<SahilPlanProje.WebUI.Dtos.InstitutionOptionDto>()));
+        const departments = @Html.Raw(JsonConvert.SerializeObject(Model?.departments ?? new List<SahilPlanProje.WebUI.Dtos.DepartmentOptionDto>()));
+        const directorates = @Html.Raw(JsonConvert.SerializeObject(Model?.directorates ?? new List<SahilPlanProje.WebUI.Dtos.DirectorateOptionDto>()));
+        const scales = @Html.Raw(JsonConvert.SerializeObject(Model?.scales ?? new List<SahilPlanProje.WebUI.Dtos.ScaleOptionDto>()));
+
+        const feeSubjects = @Html.Raw(JsonConvert.SerializeObject(Model?.fee_subjects ?? new List<SahilPlanProje.WebUI.Dtos.FeeSubjectOptionDto>()));
+
+        const feeSubSubjects = @Html.Raw(JsonConvert.SerializeObject(Model?.fee_sub_subjects ?? new List<SahilPlanProje.WebUI.Dtos.FeeSubSubjectOptionDto>()));
+
+
+    const feeSubjectSelect = document.getElementById("feeSubjectSelect");
+
+    const feeSubSubjectSelect = document.getElementById("feeSubSubjectSelect");
+
+    const citySelect = document.getElementById("citySelect");
+    const districtSelect = document.getElementById("districtSelect");
+    const institutionSelect = document.getElementById("institutionSelect");
+    const departmentSelect = document.getElementById("departmentSelect");
+    const directorateSelect = document.getElementById("directorateSelect");
+    const scaleSelect = document.getElementById("scaleSelect");
+
+    function fillSelect(select, data, defaultText, textField = "name") {
+        select.innerHTML = `<option value="">${defaultText}</option>`;
+
+        data.forEach(item => {
+            const option = document.createElement("option");
+            option.value = item.id;
+            option.textContent = item[textField];
+            select.appendChild(option);
+        });
+    }
+
+    function clearAfterCity() {
+        fillSelect(districtSelect, [], "İlçe Seçiniz");
+        fillSelect(institutionSelect, [], "Tahakkuk Kurumu");
+        fillSelect(departmentSelect, [], "Daire Başkanlığı");
+        fillSelect(directorateSelect, [], "Müdürlük");
+        fillSelect(scaleSelect, [], "Ölçek Seçiniz");
+    }
+
+    citySelect.addEventListener("change", function () {
+        const cityId = parseInt(this.value);
+
+        fillSelect(
+            districtSelect,
+            districts.filter(x => x.city_id === cityId),
+            "İlçe Seçiniz"
+        );
+
+        fillSelect(institutionSelect, [], "Tahakkuk Kurumu");
+        fillSelect(departmentSelect, [], "Daire Başkanlığı");
+        fillSelect(directorateSelect, [], "Müdürlük");
+        fillSelect(scaleSelect, [], "Ölçek Seçiniz");
+    });
+
+    districtSelect.addEventListener("change", function () {
+        const districtId = parseInt(this.value);
+
+        const filteredYears = years.filter(x => x.district_id === districtId);
+        const yearIds = filteredYears.map(x => x.id);
+
+        fillSelect(
+            institutionSelect,
+            institutions.filter(x => yearIds.includes(x.tahakkuk_year_id)),
+            "Tahakkuk Kurumu"
+        );
+
+        fillSelect(departmentSelect, [], "Daire Başkanlığı");
+        fillSelect(directorateSelect, [], "Müdürlük");
+        fillSelect(scaleSelect, [], "Ölçek Seçiniz");
+    });
+
+    institutionSelect.addEventListener("change", function () {
+        const institutionId = parseInt(this.value);
+
+        fillSelect(
+            departmentSelect,
+            departments.filter(x => x.tahakkuk_institution_id === institutionId),
+            "Daire Başkanlığı"
+        );
+
+        fillSelect(directorateSelect, [], "Müdürlük");
+        fillSelect(scaleSelect, [], "Ölçek Seçiniz");
+    });
+
+    departmentSelect.addEventListener("change", function () {
+        const departmentId = parseInt(this.value);
+
+        fillSelect(
+            directorateSelect,
+            directorates.filter(x => x.tahakkuk_department_id === departmentId),
+            "Müdürlük"
+        );
+
+        fillSelect(scaleSelect, [], "Ölçek Seçiniz");
+    });
+
+    directorateSelect.addEventListener("change", function () {
+        const directorateId = parseInt(this.value);
+
+        fillSelect(
+            scaleSelect,
+            scales.filter(x => x.tahakkuk_directorate_id === directorateId),
+            "Ölçek Seçiniz"
+        );
+    });
+
+scaleSelect.addEventListener("change", async function () {
+
+    const scaleId =2;// this.value;
+    const directorateId =2;// directorateSelect.value;
+
+    fillSelect(feeSubjectSelect, [], "Ücret Konusu Seçiniz");
+    fillSelect(feeSubSubjectSelect, [], "Ücret Alt Konusu Seçiniz");
+
+    if (!scaleId || !directorateId) {
+        return;
+    }
+
+    const response = await fetch(
+        `https://api.sahilplanproje.com/api/Tahakkuk/fee-subjects?directorateId=${directorateId}&scaleId=${scaleId}`
+    );
+
+    if (!response.ok) {
+        console.error("Ücret konusu API hatası:", response.status);
+        return;
+    }
+
+    const data = await response.json();
+
+    fillSelect(
+        feeSubjectSelect,
+        data,
+        "Ücret Konusu Seçiniz"
+    );
+});
+
+feeSubjectSelect.addEventListener("change", async function () {
+
+    const feeSubjectId = parseInt(this.value);
+
+    fillSelect(
+        feeSubSubjectSelect,
+        [],
+        "Ücret Alt Konusu Seçiniz"
+    );
+
+    if (!feeSubjectId) {
+        return;
+    }
+
+    try {
+
+        const response = await fetch(
+            `https://api.sahilplanproje.com/api/Tahakkuk/fee-sub-subjects?feeSubjectId=${feeSubjectId}`
+        );
+
+        if (!response.ok) {
+
+            console.error("Ücret Alt Konusu API hatası:", response.status);
+            return;
+        }
+
+        const data = await response.json();
+
+        console.log("Fee Sub Subjects:", data);
+
+        fillSelect(
+            feeSubSubjectSelect,
+            data,
+            "Ücret Alt Konusu Seçiniz"
+        );
+
+    } catch (err) {
+
+        console.error("Fetch Hatası:", err);
+    }
+});
+
+feeSubSubjectSelect.addEventListener("change", async function () {
+
+    const feeSubjectId = parseInt(feeSubjectSelect.value);
+    const feeSubSubjectId = parseInt(this.value);
+
+    selectedDefinition = null;
+
+    if (!feeSubjectId || !feeSubSubjectId) {
+        return;
+    }
+
+    try {
+        const response = await fetch(
+            `https://api.sahilplanproje.com/api/Tahakkuk/definition?feeSubjectId=${feeSubjectId}&feeSubSubjectId=${feeSubSubjectId}`
+        );
+
+        if (!response.ok) {
+            console.error("Definition API hatası:", response.status);
+            return;
+        }
+
+        selectedDefinition = await response.json();
+
+        console.log("Definition:", selectedDefinition);
+
+    } catch (err) {
+        console.error("Definition Fetch Hatası:", err);
+    }
+});
+
+</script>
+
+<script>
+
+    function calculateTahakkuk(){
+
+    const cityText = citySelect.options[citySelect.selectedIndex].text;
+    const districtText = districtSelect.options[districtSelect.selectedIndex].text;
+    const institutionText = institutionSelect.options[institutionSelect.selectedIndex].text;
+    const feeSubjectText = feeSubjectSelect.options[feeSubjectSelect.selectedIndex].text;
+    const feeSubSubjectText = feeSubSubjectSelect.options[feeSubSubjectSelect.selectedIndex].text;
+
+    if (!selectedDefinition) {
+        alert("Lütfen ücret alt konusu seçiniz.");
+        return;
+    }
+
+    document.getElementById("sonucIl").innerText = cityText;
+    document.getElementById("sonucIlce").innerText = districtText;
+    document.getElementById("sonucKurum").innerText = institutionText;
+    document.getElementById("sonucUcretKonusu").innerText = feeSubjectText;
+    document.getElementById("sonucUcretAltKonusu").innerText = feeSubSubjectText;
+
+    document.getElementById("sonucFiyat").innerText = selectedDefinition.fee_text;
+    //document.getElementById("fiyat").innerText = selectedDefinition.fee_amount;
+
+    let totalPrice = selectedDefinition.fee_amount;
+    if (selectedDefinition.has_vat) {
+        totalPrice = totalPrice * 1.20;
+    }
+    const formattedPrice = totalPrice.toLocaleString(
+        "tr-TR",
+        {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }
+    );
+
+    document.getElementById("fiyat").innerText =
+        formattedPrice + " ₺";
+
+
+    document.getElementById("sonucKdv").innerText = selectedDefinition.has_vat ? "KDV Dahil / Uygulanır" : "KDV Yok";
+    document.getElementById("sonucAciklama1").innerText = selectedDefinition.description1 ?? "";
+    document.getElementById("sonucAciklama2").innerText = selectedDefinition.description2 ?? "";
+
+    document.getElementById("hesaplamaSonuc").style.display = "block";
+
+    }
+
+
+</script>

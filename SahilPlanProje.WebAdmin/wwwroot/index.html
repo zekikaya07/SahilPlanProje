@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tahakkuk Yönetim Paneli | Tam Hiyerarşi (Ölçek Dahil)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f1f5f9; color: #0f172a; }
+        .app-container { display: flex; min-height: 100vh; }
+        
+        /* SIDEBAR */
+        .sidebar {
+            width: 290px;
+            background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+            color: #e2e8f0;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.08);
+        }
+        .sidebar-header { padding: 28px 24px; border-bottom: 1px solid #334155; }
+        .sidebar-header h2 { font-size: 1.4rem; display: flex; align-items: center; gap: 10px; color: white; }
+        .sidebar-header h2 i { color: #38bdf8; font-size: 1.6rem; }
+        .nav-menu { padding: 20px 12px; display: flex; flex-direction: column; gap: 6px; }
+        .nav-item {
+            display: flex; align-items: center; gap: 12px; padding: 10px 16px;
+            border-radius: 12px; font-weight: 500; cursor: pointer; transition: 0.2s;
+            color: #cbd5e1; font-size: 0.9rem;
+        }
+        .nav-item i { width: 24px; }
+        .nav-item:hover { background: #334155; color: white; }
+        .nav-item.active { background: #3b82f6; color: white; }
+        
+        /* MAIN */
+        .main-content { flex: 1; background: #f8fafc; display: flex; flex-direction: column; }
+        .top-bar {
+            background: white; padding: 16px 28px; border-bottom: 1px solid #e2e8f0;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .page-title { font-size: 1.5rem; font-weight: 700; background: linear-gradient(135deg, #1e293b, #2d3a4e); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        
+        /* DUAL PANE: Liste ve Form farklı arka plan */
+        .dual-pane { display: flex; gap: 28px; padding: 28px 32px; flex-wrap: wrap; flex: 1; }
+        .list-pane {
+            flex: 1.3; background: white; border-radius: 28px; box-shadow: 0 8px 20px rgba(0,0,0,0.03);
+            padding: 22px; border: 1px solid #eef2f6;
+        }
+        .form-pane {
+            flex: 1; background: linear-gradient(135deg, #fffef8, #fff7ed);
+            border-radius: 28px; box-shadow: 0 20px 30px -12px rgba(0,0,0,0.1);
+            padding: 24px; border: 1px solid #ffe6c7;
+        }
+        .section-header {
+            font-weight: 700; font-size: 1.1rem; border-left: 5px solid #3b82f6;
+            padding-left: 14px; margin-bottom: 20px; display: flex; justify-content: space-between;
+        }
+        .entity-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+        .entity-table th, .entity-table td { padding: 10px 6px; border-bottom: 1px solid #eef2f8; text-align: left; }
+        .entity-table th { color: #475569; font-weight: 600; }
+        .record-row { cursor: pointer; transition: 0.05s; }
+        .record-row:hover { background: #f8fafc; }
+        .badge-active { background: #dcfce7; color: #15803d; padding: 3px 10px; border-radius: 40px; font-size: 0.7rem; font-weight: 600; }
+        .badge-inactive { background: #fee2e2; color: #b91c1c; }
+        .form-group { margin-bottom: 18px; }
+        label { font-weight: 600; font-size: 0.75rem; display: block; margin-bottom: 5px; color: #334155; text-transform: uppercase; letter-spacing: 0.3px; }
+        input, select, textarea {
+            width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 16px;
+            font-family: 'Inter', monospace; font-size: 0.85rem; background: white;
+        }
+        input:focus, select:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.2); }
+        button {
+            background: #3b82f6; border: none; padding: 10px 20px; border-radius: 40px;
+            font-weight: 600; color: white; cursor: pointer; font-size: 0.8rem;
+            display: inline-flex; align-items: center; gap: 8px;
+        }
+        button.btn-secondary { background: #e2e8f0; color: #1e293b; }
+        button.danger { background: #ef4444; }
+        .action-icons i { margin: 0 5px; cursor: pointer; font-size: 0.9rem; }
+        .empty-msg { text-align: center; padding: 40px; color: #94a3b8; }
+        hr { margin: 12px 0; }
+        @media (max-width: 800px) { .dual-pane { flex-direction: column; } .sidebar { width: 80px; } .nav-item span { display: none; } .nav-item i { margin: auto; } }
+    </style>
+</head>
+<body>
+<div class="app-container">
+    <div class="sidebar">
+        <div class="sidebar-header"><h2><i class="fas fa-charging-station"></i> <span>Tahakkuk ERP</span></h2></div>
+        <div class="nav-menu">
+            <div class="nav-item" data-module="cities"><i class="fas fa-city"></i><span>İller</span></div>
+            <div class="nav-item" data-module="districts"><i class="fas fa-map-marker-alt"></i><span>İlçeler</span></div>
+            <div class="nav-item" data-module="tahakkukYears"><i class="fas fa-calendar-alt"></i><span>Tahakkuk Yılları</span></div>
+            <div class="nav-item" data-module="institutions"><i class="fas fa-building"></i><span>Kurumlar</span></div>
+            <div class="nav-item" data-module="departments"><i class="fas fa-sitemap"></i><span>Daire Başkanlıkları</span></div>
+            <div class="nav-item" data-module="directorates"><i class="fas fa-user-tie"></i><span>Müdürlükler</span></div>
+            <div class="nav-item" data-module="scales"><i class="fas fa-ruler-combined"></i><span>Ölçekler</span></div>
+            <div class="nav-item" data-module="feeSubjects"><i class="fas fa-tags"></i><span>Ücret Konuları</span></div>
+            <div class="nav-item" data-module="definitions"><i class="fas fa-file-invoice-dollar"></i><span>Ücret Tanımları</span></div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="top-bar">
+            <h1 class="page-title" id="current-module-title">İl Yönetimi</h1>
+            <div><i class="fas fa-database"></i> <span id="record-count">0 kayıt</span></div>
+        </div>
+        <div class="dual-pane">
+            <div class="list-pane">
+                <div class="section-header">
+                    <span><i class="fas fa-list-ul"></i> Kayıt Listesi</span>
+                    <button id="refreshListBtn" style="background:#eef2ff; color:#2563eb;"><i class="fas fa-sync-alt"></i> Yenile</button>
+                </div>
+                <div id="listContainer"><div class="empty-msg">Yükleniyor...</div></div>
+            </div>
+            <div class="form-pane">
+                <div class="section-header">
+                    <span><i class="fas fa-pen-alt"></i> <span id="formTitle">Yeni Kayıt Ekle</span></span>
+                    <button id="clearFormBtn" class="btn-secondary"><i class="fas fa-eraser"></i> Temizle</button>
+                </div>
+                <form id="dataForm">
+                    <input type="hidden" id="editId" value="">
+                    <div id="dynamicFormFields"></div>
+                    <div style="display: flex; gap: 12px; margin-top: 20px;">
+                        <button type="submit" id="saveBtn"><i class="fas fa-save"></i> Kaydet</button>
+                        <button type="button" id="deleteBtn" class="danger"><i class="fas fa-trash"></i> Sil</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ======================== TAM MOCK VERİTABANI (ÖLÇEK DAHİL) ========================
+    let db = {
+        cities: [
+            { id: 1, code: "TR34", plate_code: "34", name: "İstanbul", country_code: "TR", is_active: true, create_date: "2024-01-01" },
+            { id: 2, code: "TR06", plate_code: "06", name: "Ankara", country_code: "TR", is_active: true, create_date: "2024-01-01" }
+        ],
+        districts: [
+            { id: 1, city_id: 1, code: "341", district_no: "1", name: "Kadıköy", is_central: false, is_active: true, create_date: "2024-01-10" },
+            { id: 2, city_id: 1, code: "342", district_no: "2", name: "Beşiktaş", is_central: true, is_active: true, create_date: "2024-01-10" },
+            { id: 3, city_id: 2, code: "061", district_no: "1", name: "Çankaya", is_central: true, is_active: true, create_date: "2024-01-10" }
+        ],
+        tahakkukYears: [
+            { id: 1, district_id: 1, year: 2025, is_active: true, create_date: "2024-02-01" },
+            { id: 2, district_id: 2, year: 2025, is_active: true, create_date: "2024-02-01" },
+            { id: 3, district_id: 3, year: 2024, is_active: false, create_date: "2024-02-01" }
+        ],
+        tahakkukInstitutions: [
+            { id: 1, tahakkuk_year_id: 1, name: "Kadıköy Belediyesi", is_active: true, create_date: "2024-03-01" },
+            { id: 2, tahakkuk_year_id: 2, name: "Beşiktaş Belediyesi", is_active: true, create_date: "2024-03-01" }
+        ],
+        tahakkukDepartments: [
+            { id: 1, tahakkuk_institution_id: 1, name: "Mali Hizmetler Daire Başkanlığı", is_active: true, create_date: "2024-03-10" },
+            { id: 2, tahakkuk_institution_id: 1, name: "Vergi Daire Başkanlığı", is_active: true, create_date: "2024-03-10" }
+        ],
+        tahakkukDirectories: [
+            { id: 1, tahakkuk_department_id: 1, name: "Gelir Müdürlüğü", is_active: true, create_date: "2024-04-01" },
+            { id: 2, tahakkuk_department_id: 2, name: "Emlak Vergisi Müdürlüğü", is_active: true, create_date: "2024-04-01" }
+        ],
+        // ** ÖLÇEKLER TABLOSU (ER'deki TahakkukScales) **
+        tahakkukScales: [
+            { id: 1, tahakkuk_directorate_id: 1, scale_value: "1", name: "1. Ölçek (Düşük)", is_active: true, create_date: "2024-04-15" },
+            { id: 2, tahakkuk_directorate_id: 1, scale_value: "2", name: "2. Ölçek (Orta)", is_active: true, create_date: "2024-04-15" },
+            { id: 3, tahakkuk_directorate_id: 2, scale_value: "A", name: "A Sınıfı (Yüksek)", is_active: true, create_date: "2024-04-15" }
+        ],
+        tahakkukFeeSubjects: [
+            { id: 1, tahakkuk_directorate_id: 1, name: "Çevre Temizlik Vergisi", is_active: true, create_date: "2024-05-01" },
+            { id: 2, tahakkuk_directorate_id: 2, name: "Emlak Vergisi", is_active: true, create_date: "2024-05-01" }
+        ],
+        tahakkukDefinitions: [
+            { id: 1, tahakkuk_fee_subject_id: 1, fee_text: "Konut ÇTV", fee_amount: 350.00, has_vat: true, description1: "Aylık", description2: "Konutlar", is_active: true },
+            { id: 2, tahakkuk_fee_subject_id: 2, fee_text: "Mesken Emlak", fee_amount: 1200.00, has_vat: false, description1: "Yıllık", description2: "Bina", is_active: true }
+        ]
+    };
+
+    let currentModule = "cities";
+    let currentRecords = [];
+
+    // Tüm modül şemaları (Scales eklendi, FeeSubjects artık müdürlük+ölçek bağlantısı ER'de feeSubjects -> directorate, scales -> directorate)
+    // NOT: ER'de TahakkukFeeSubjects, TahakkukDirectories ile FK; TahakkukScales da TahakkukDirectories ile FK. Her ikisi de müdürlüğe bağlı.
+    const moduleSchemas = {
+        cities: { name:"İller", fields: ["code","plate_code","name","country_code","is_active"], labels: {code:"Kod",plate_code:"Plaka",name:"İl Adı",country_code:"Ülke",is_active:"Aktif"} },
+        districts: { name:"İlçeler", fields: ["city_id","code","district_no","name","is_central","is_active"], labels: {city_id:"İl",code:"İlçe Kodu",district_no:"No",name:"İlçe Adı",is_central:"Merkez",is_active:"Aktif"}, foreign:{city_id:{table:"cities",label:"name",value:"id"}} },
+        tahakkukYears: { name:"Tahakkuk Yılları", fields: ["district_id","year","is_active"], labels: {district_id:"İlçe",year:"Yıl",is_active:"Aktif"}, foreign:{district_id:{table:"districts",label:"name",value:"id"}} },
+        institutions: { name:"Kurumlar", fields: ["tahakkuk_year_id","name","is_active"], labels: {tahakkuk_year_id:"Tahakkuk Yılı",name:"Kurum Adı",is_active:"Aktif"}, foreign:{tahakkuk_year_id:{table:"tahakkukYears",label:"year",value:"id"}} },
+        departments: { name:"Daire Başkanlıkları", fields: ["tahakkuk_institution_id","name","is_active"], labels: {tahakkuk_institution_id:"Kurum",name:"Daire Adı",is_active:"Aktif"}, foreign:{tahakkuk_institution_id:{table:"tahakkukInstitutions",label:"name",value:"id"}} },
+        directorates: { name:"Müdürlükler", fields: ["tahakkuk_department_id","name","is_active"], labels: {tahakkuk_department_id:"Daire Başkanlığı",name:"Müdürlük Adı",is_active:"Aktif"}, foreign:{tahakkuk_department_id:{table:"tahakkukDepartments",label:"name",value:"id"}} },
+        scales: { name:"Ölçekler", fields: ["tahakkuk_directorate_id","scale_value","name","is_active"], labels: {tahakkuk_directorate_id:"Müdürlük",scale_value:"Ölçek Değeri",name:"Ölçek Adı",is_active:"Aktif"}, foreign:{tahakkuk_directorate_id:{table:"tahakkukDirectories",label:"name",value:"id"}} },
+        feeSubjects: { name:"Ücret Konuları", fields: ["tahakkuk_directorate_id","name","is_active"], labels: {tahakkuk_directorate_id:"Müdürlük",name:"Ücret Konusu",is_active:"Aktif"}, foreign:{tahakkuk_directorate_id:{table:"tahakkukDirectories",label:"name",value:"id"}} },
+        definitions: { name:"Ücret Tanımları", fields: ["tahakkuk_fee_subject_id","fee_text","fee_amount","has_vat","description1","description2","is_active"], labels: {tahakkuk_fee_subject_id:"Ücret Konusu",fee_text:"Ücret Metni",fee_amount:"Tutar",has_vat:"KDV",description1:"Açıklama1",description2:"Açıklama2",is_active:"Aktif"}, foreign:{tahakkuk_fee_subject_id:{table:"tahakkukFeeSubjects",label:"name",value:"id"}} }
+    };
+
+    function getTableName(module) {
+        const mapping = {
+            cities:"cities", districts:"districts", tahakkukYears:"tahakkukYears",
+            institutions:"tahakkukInstitutions", departments:"tahakkukDepartments",
+            directorates:"tahakkukDirectories", scales:"tahakkukScales",
+            feeSubjects:"tahakkukFeeSubjects", definitions:"tahakkukDefinitions"
+        };
+        return mapping[module];
+    }
+
+    function loadRecords() {
+        const table = getTableName(currentModule);
+        if(!table) return;
+        currentRecords = [...db[table]];
+        renderList();
+        document.getElementById("record-count").innerText = currentRecords.length + " kayıt";
+        document.getElementById("current-module-title").innerText = moduleSchemas[currentModule]?.name + " Yönetimi";
+    }
+
+    function renderList() {
+        const container = document.getElementById("listContainer");
+        const schema = moduleSchemas[currentModule];
+        if(!schema){ container.innerHTML="<div class='empty-msg'>Hata</div>"; return; }
+        if(currentRecords.length === 0){
+            container.innerHTML="<div class='empty-msg'><i class='fas fa-database'></i> Kayıt yok</div>";
+            return;
+        }
+        const displayFields = schema.fields.filter(f => f !== "is_active" && f !== "create_date");
+        const tableHtml = `<table class="entity-table"><thead><tr>${displayFields.map(f=>`<th>${schema.labels[f] || f}</th>`).join('')}<th>Durum</th><th></th></tr></thead><tbody>
+            ${currentRecords.map(rec => {
+                const rowVals = displayFields.map(f => {
+                    let val = rec[f];
+                    if(schema.foreign && schema.foreign[f]){
+                        const ref = schema.foreign[f];
+                        const targetTable = db[ref.table];
+                        const found = targetTable.find(t => t[ref.value] === val);
+                        val = found ? found[ref.label] : val;
+                    }
+                    return `<td>${val ?? "-"}</td>`;
+                }).join('');
+                const activeBadge = rec.is_active ? "<span class='badge-active'>Aktif</span>" : "<span class='badge-active badge-inactive'>Pasif</span>";
+                return `<tr class="record-row" data-id="${rec.id}">${rowVals}<td>${activeBadge}</td><td class="action-icons"><i class="fas fa-edit edit-icon" data-id="${rec.id}"></i> <i class="fas fa-trash-alt delete-icon" data-id="${rec.id}"></i></td></tr>`;
+            }).join('')}
+        </tbody></table>`;
+        container.innerHTML = tableHtml;
+        document.querySelectorAll('.edit-icon').forEach(icon => icon.addEventListener('click', (e) => { e.stopPropagation(); loadToForm(parseInt(icon.dataset.id)); }));
+        document.querySelectorAll('.delete-icon').forEach(icon => icon.addEventListener('click', (e) => { e.stopPropagation(); if(confirm("Silinsin mi?")) deleteRecordById(parseInt(icon.dataset.id)); }));
+        document.querySelectorAll('.record-row').forEach(row => row.addEventListener('click', (e) => { if(e.target.classList.contains('edit-icon')||e.target.classList.contains('delete-icon')) return; loadToForm(parseInt(row.dataset.id)); }));
+    }
+
+    function loadToForm(id){
+        const table = getTableName(currentModule);
+        const record = db[table].find(r => r.id === id);
+        if(!record) return;
+        document.getElementById("editId").value = id;
+        document.getElementById("formTitle").innerText = "Kaydı Güncelle";
+        generateFormFields(record);
+    }
+
+    function generateFormFields(existing = null){
+        const schema = moduleSchemas[currentModule];
+        const fieldsDiv = document.getElementById("dynamicFormFields");
+        let html = "";
+        for(let field of schema.fields){
+            let value = existing ? existing[field] : (field === "is_active" ? true : (field === "has_vat"? false : ""));
+            if(field === "create_date") continue;
+            if(schema.foreign && schema.foreign[field]){
+                const ref = schema.foreign[field];
+                const options = db[ref.table] || [];
+                html += `<div class="form-group"><label>${schema.labels[field]}</label><select name="${field}" id="field_${field}"><option value="">Seçiniz</option>`;
+                options.forEach(opt => {
+                    const selected = (value == opt[ref.value]) ? "selected" : "";
+                    html += `<option value="${opt[ref.value]}" ${selected}>${opt[ref.label]}</option>`;
+                });
+                html += `</select></div>`;
+            } else if(field === "is_active" || field === "has_vat"){
+                const checked = value ? "checked" : "";
+                html += `<div class="form-group"><label>${schema.labels[field]}</label><div><input type="checkbox" id="field_${field}" ${checked} /> Aktif/Pasif</div></div>`;
+            } else {
+                html += `<div class="form-group"><label>${schema.labels[field]}</label><input type="text" id="field_${field}" value="${value ?? ""}" /></div>`;
+            }
+        }
+        fieldsDiv.innerHTML = html;
+    }
+
+    function clearForm(){
+        document.getElementById("editId").value = "";
+        document.getElementById("formTitle").innerText = "Yeni Kayıt Ekle";
+        generateFormFields(null);
+    }
+
+    function getFormData(){
+        const schema = moduleSchemas[currentModule];
+        const data = {};
+        for(let field of schema.fields){
+            if(field === "create_date") continue;
+            const el = document.getElementById(`field_${field}`);
+            if(!el) continue;
+            if(el.type === "checkbox") data[field] = el.checked;
+            else if(el.tagName === "SELECT") data[field] = el.value ? (isNaN(parseInt(el.value))? el.value : parseInt(el.value)) : null;
+            else data[field] = el.value;
+        }
+        data.is_active = data.is_active !== undefined ? data.is_active : true;
+        if(data.fee_amount) data.fee_amount = parseFloat(data.fee_amount);
+        return data;
+    }
+
+    function saveRecord(){
+        const tableName = getTableName(currentModule);
+        const editId = document.getElementById("editId").value;
+        const formData = getFormData();
+        const nowDate = new Date().toISOString().slice(0,10);
+        if(editId){
+            const idx = db[tableName].findIndex(r => r.id == editId);
+            if(idx !== -1) db[tableName][idx] = { ...db[tableName][idx], ...formData };
+        } else {
+            const newId = db[tableName].length ? Math.max(...db[tableName].map(r=>r.id)) + 1 : 1;
+            db[tableName].push({ id: newId, ...formData, create_date: nowDate });
+        }
+        loadRecords();
+        clearForm();
+    }
+
+    function deleteRecordById(id){
+        const tableName = getTableName(currentModule);
+        const idx = db[tableName].findIndex(r=>r.id === id);
+        if(idx !== -1) db[tableName].splice(idx,1);
+        loadRecords();
+        clearForm();
+    }
+
+    function switchModule(module){
+        currentModule = module;
+        loadRecords();
+        clearForm();
+    }
+
+    // Event Listeners
+    document.querySelectorAll(".nav-item").forEach(item => {
+        item.addEventListener("click", () => {
+            document.querySelectorAll(".nav-item").forEach(n=>n.classList.remove("active"));
+            item.classList.add("active");
+            switchModule(item.dataset.module);
+        });
+    });
+    document.getElementById("refreshListBtn").addEventListener("click", ()=>loadRecords());
+    document.getElementById("clearFormBtn").addEventListener("click", ()=>clearForm());
+    document.getElementById("dataForm").addEventListener("submit", (e)=>{ e.preventDefault(); saveRecord(); });
+    document.getElementById("deleteBtn").addEventListener("click", ()=>{
+        const id = document.getElementById("editId").value;
+        if(id && confirm("Kalıcı olarak sil?")) deleteRecordById(parseInt(id));
+        else if(!id) alert("Silmek için listeden bir kayıt seçin.");
+    });
+
+    // Başlat
+    switchModule("cities");
+    document.querySelector('.nav-item[data-module="cities"]').classList.add("active");
+</script>
+</body>
+</html>

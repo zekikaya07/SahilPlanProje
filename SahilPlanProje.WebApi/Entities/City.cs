@@ -15,6 +15,6 @@
         public string country_code { get; set; }
 
         // Navigation Property
-        public ICollection<District> districts { get; set; }
+        //public ICollection<District> districts { get; set; }
     }
 }

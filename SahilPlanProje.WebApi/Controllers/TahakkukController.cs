@@ -188,6 +188,136 @@ namespace SahilPlanProje.WebApi.Controllers
         [HttpGet("filter-options")]
         public IActionResult GetFilterOptions()
         {
+            var scales = _context.TahakkukScales
+                .Where(x => x.is_active)
+                .Select(x => new
+                {
+                    x.id,
+                    x.tahakkuk_directorate_id,
+                    x.scale_value,
+                    x.name
+                })
+                .OrderBy(x => x.scale_value)
+                .ToList();
+
+            var directorateIds = scales
+                .Select(x => x.tahakkuk_directorate_id)
+                .Distinct()
+                .ToList();
+
+            var directorates = _context.TahakkukDirectorates
+                .Where(x => x.is_active &&
+                            directorateIds.Contains(x.id))
+                .Select(x => new
+                {
+                    x.id,
+                    x.tahakkuk_department_id,
+                    x.name
+                })
+                .OrderBy(x => x.name)
+                .ToList();
+
+            var departmentIds = directorates
+                .Select(x => x.tahakkuk_department_id)
+                .Distinct()
+                .ToList();
+
+            var departments = _context.TahakkukDepartments
+                .Where(x => x.is_active &&
+                            departmentIds.Contains(x.id))
+                .Select(x => new
+                {
+                    x.id,
+                    x.tahakkuk_institution_id,
+                    x.name
+                })
+                .OrderBy(x => x.name)
+                .ToList();
+
+            var institutionIds = departments
+                .Select(x => x.tahakkuk_institution_id)
+                .Distinct()
+                .ToList();
+
+            var institutions = _context.TahakkukInstitutions
+                .Where(x => x.is_active &&
+                            institutionIds.Contains(x.id))
+                .Select(x => new
+                {
+                    x.id,
+                    x.tahakkuk_year_id,
+                    x.name
+                })
+                .OrderBy(x => x.name)
+                .ToList();
+
+            var yearIds = institutions
+                .Select(x => x.tahakkuk_year_id)
+                .Distinct()
+                .ToList();
+
+            var years = _context.TahakkukYears
+                .Where(x => x.is_active &&
+                            yearIds.Contains(x.id))
+                .Select(x => new
+                {
+                    x.id,
+                    x.district_id,
+                    x.year
+                })
+                .OrderByDescending(x => x.year)
+                .ToList();
+
+            var districtIds = years
+                .Select(x => x.district_id)
+                .Distinct()
+                .ToList();
+
+            var districts = _context.Districts
+                .Where(x => x.is_active &&
+                            districtIds.Contains(x.id))
+                .Select(x => new
+                {
+                    x.id,
+                    x.city_id,
+                    x.name
+                })
+                .OrderBy(x => x.name)
+                .ToList();
+
+            var cityIds = districts
+                .Select(x => x.city_id)
+                .Distinct()
+                .ToList();
+
+            var cities = _context.Cities
+                .Where(x => x.is_active &&
+                            cityIds.Contains(x.id))
+                .Select(x => new
+                {
+                    x.id,
+                    x.name
+                })
+                .OrderBy(x => x.name)
+                .ToList();
+
+            var values = new
+            {
+                cities,
+                districts,
+                years,
+                institutions,
+                departments,
+                directorates,
+                scales
+            };
+
+            return Ok(values);
+        }
+
+        [HttpGet("filter-optionsv2")]
+        public IActionResult GetFilterOptionsv2()
+        {
             var values = new
             {
                 cities = _context.Cities
@@ -254,6 +384,7 @@ namespace SahilPlanProje.WebApi.Controllers
                     })
                     .OrderBy(x => x.name)
                     .ToList(),
+
 
                 scales = _context.TahakkukScales
                     .Where(x => x.is_active)
