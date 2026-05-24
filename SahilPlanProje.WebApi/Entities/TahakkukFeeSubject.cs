@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SahilPlanProje.WebApi.Entities
 {
@@ -6,17 +7,10 @@ namespace SahilPlanProje.WebApi.Entities
     public class TahakkukFeeSubject : BaseEntity
     {
 
-        public int tahakkuk_directorate_id { get; set; }
-
-        public int? tahakkuk_scale_id { get; set; }
-
-        public string name { get; set; }
+        [Required]
+        [MaxLength(250)]
+        public string name { get; set; } = string.Empty;
 
 
-        [ForeignKey(nameof(tahakkuk_directorate_id))]
-        public TahakkukDirectorate tahakkuk_directorate { get; set; }
-
-        [ForeignKey(nameof(tahakkuk_scale_id))]
-        public TahakkukScale tahakkuk_scale { get; set; }
     }
 }

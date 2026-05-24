@@ -8,12 +8,12 @@ namespace SahilPlanProje.WebApi.Entities
         public int city_id { get; set; }
 
         // Örn: 07001
-        public string code { get; set; }
+        public string code { get; set; } = string.Empty;
 
         // İl içindeki sıra numarası
         public short district_no { get; set; }
 
-        public string name { get; set; }
+        public string name { get; set; } = string.Empty;
 
         public bool is_central { get; set; }
 

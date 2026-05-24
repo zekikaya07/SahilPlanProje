@@ -1,20 +1,27 @@
-﻿namespace SahilPlanProje.WebApi.Entities
+﻿
+using System.ComponentModel.DataAnnotations;
+
+namespace SahilPlanProje.WebApi.Entities
 {
     public class City : BaseEntity
     {
 
         // Plaka kodu -> 07
-        public string code { get; set; }
+        [MaxLength(10)]
+        public string code { get; set; } = string.Empty;
 
         // Sayısal plaka -> 7
-        public int plate_code { get; set; }
+        [MaxLength(10)]
+        public string plate_code { get; set; } = string.Empty;
 
-        public string name { get; set; }
+        [MaxLength(100)]
+        public string name { get; set; } = string.Empty;
 
         // TR
-        public string country_code { get; set; }
+        [MaxLength(5)]
+        public string country_code { get; set; } = "TR";
 
         // Navigation Property
-        //public ICollection<District> districts { get; set; }
+        public ICollection<District> districts { get; set; }
     }
 }

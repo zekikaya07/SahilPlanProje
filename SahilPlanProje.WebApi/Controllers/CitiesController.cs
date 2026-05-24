@@ -1,6 +1,8 @@
-﻿ using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SahilPlanProje.WebApi.Context;
+using SahilPlanProje.WebApi.Dtos.CityDtos;
 using SahilPlanProje.WebApi.Entities;
 
 namespace SahilPlanProje.WebApi.Controllers
@@ -10,55 +12,96 @@ namespace SahilPlanProje.WebApi.Controllers
     public class CitiesController : ControllerBase
     {
         private readonly ApiContext _context;
-        public CitiesController(ApiContext context)
+        private readonly IMapper _mapper;
+
+        public CitiesController(ApiContext context, IMapper mapper)
         {
             _context = context;
-        }
-
-        [HttpPost]
-        public IActionResult CreateFeature(City feature)
-        {
-            _context.Cities.Add(feature);
-            _context.SaveChanges();
-            return Ok("Özellik EKleme İşlemi başarılı");
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public IActionResult GetFeatureList()
+        public IActionResult GetCityList()
         {
             var values = _context.Cities.ToList();
-            return Ok(values);
+            return Ok(_mapper.Map<List<ResultCityDto>>(values));
         }
 
-        [HttpDelete]
-        public IActionResult DeleteFeature(int id)
+        [HttpGet("{id}")]
+        public IActionResult GetCity(int id)
         {
-            var feature = _context.Cities.Find(id);
-            _context.Cities.Remove(feature);
-            _context.SaveChanges();
-            return Ok("Silme İşlemi Başarılı");
+            var value = _context.Cities.Find(id);
+            return Ok(_mapper.Map<GetByIdCityDto>(value));
         }
 
-        [HttpGet("GetFeature")]
-        public IActionResult GetFeature(int id)
+        [HttpPost]
+        public async Task<IActionResult> CreateCity([FromBody] CreateCityDto city)
         {
-            var feature = _context.Cities.Find(id);
-            return Ok(feature);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var value = _mapper.Map<City>(city);
+
+            await _context.Cities.AddAsync(value);
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new
+            {
+                success = true,
+                message = "İl başarıyla eklendi.",
+                data = _mapper.Map<ResultCityDto>(value)
+            });
         }
 
-        [HttpPut]
-        public IActionResult UpdateFeature(City feature)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateCity(int id, [FromBody] UpdateCityDto city)
         {
-            _context.Cities.Update(feature);
-            _context.SaveChanges();
-            return Ok("Özellik GÜncelleme başarılı");
+            if (id != city.id)
+                return BadRequest("Id uyuşmuyor.");
+
+            var existingCity = await _context.Cities.FindAsync(id);
+
+            if (existingCity == null)
+                return NotFound("Kayıt bulunamadı.");
+
+            _mapper.Map(city, existingCity);
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new
+            {
+                success = true,
+                message = "Kayıt güncellendi."
+            });
+        }
+
+
+        // DELETE
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCity(int id)
+        {
+            var city = await _context.Cities.FindAsync(id);
+
+            if (city == null)
+                return NotFound("Kayıt bulunamadı.");
+
+            _context.Cities.Remove(city);
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new
+            {
+                success = true,
+                message = "Kayıt silindi."
+            });
         }
 
         [HttpGet("getinfo")]
-        public IActionResult getInfo()
+        public IActionResult GetInfo()
         {
-            return Ok("Sistem APi Servis Çalışıyor");
+            return Ok("Sistem API Servisi Çalışıyor");
         }
-
     }
 }

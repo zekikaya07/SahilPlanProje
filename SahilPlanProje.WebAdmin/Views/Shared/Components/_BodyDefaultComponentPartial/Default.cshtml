@@ -6,11 +6,26 @@
             <div class="nav-item" data-module="districts"><i class="fas fa-map-marker-alt"></i><span>İlçeler</span></div>
             <div class="nav-item" data-module="tahakkukYears"><i class="fas fa-calendar-alt"></i><span>Tahakkuk Yılları</span></div>
             <div class="nav-item" data-module="institutions"><i class="fas fa-building"></i><span>Kurumlar</span></div>
-            <div class="nav-item" data-module="departments"><i class="fas fa-sitemap"></i><span>Daire Başkanlıkları</span></div>
-            <div class="nav-item" data-module="directorates"><i class="fas fa-user-tie"></i><span>Müdürlükler</span></div>
+            <div class="nav-item" data-module="departments">
+                <i class="fas fa-sitemap"></i><span>Daire Başkanlıkları</span>
+            </div>
+
+            <div class="nav-item" data-module="directorates">
+                <i class="fas fa-user-tie"></i><span>Müdürlükler</span>
+            </div>
             <div class="nav-item" data-module="scales"><i class="fas fa-ruler-combined"></i><span>Ölçekler</span></div>
             <div class="nav-item" data-module="feeSubjects"><i class="fas fa-tags"></i><span>Ücret Konuları</span></div>
-            <div class="nav-item" data-module="definitions"><i class="fas fa-file-invoice-dollar"></i><span>Tahakkuk Tanımları</span></div>
+
+            <div class="nav-item" data-module="feeSubSubjects">
+                <i class="fas fa-layer-group"></i><span>Ücret Alt Konuları</span>
+            </div>
+
+
+            <div class="nav-item" data-module="definitions">
+                <i class="fas fa-file-invoice-dollar"></i><span>Tahakkuk Tanımları</span>
+            </div>
+
+           @*  <div class="nav-item" data-module="definitions"><i class="fas fa-file-invoice-dollar"></i><span>Tahakkuk Tanımları</span></div> *@
         </div>
     </div>
 
@@ -53,9 +68,9 @@
             title: "İller",
             listUrl: "/Cities",
             //getUrl: "/Cities/GetFeature/{id}",
-            getUrl: "/Cities/GetFeature?id={id}",
+            getUrl: "/Cities/{id}",
             createUrl: "/Cities",
-            updateUrl: "/Cities",
+            updateUrl: "/Cities/{id}",
             deleteUrl: "/Cities/{id}",
             fields: ["code", "plate_code", "name", "country_code", "is_active"],
             labels: {
@@ -67,23 +82,47 @@
             }
         },
 
-        districts: {
-            title: "İlçeler",
-            listUrl: "/Districts",
-            getUrl: "/Districts/{id}",
-            createUrl: "/Districts",
-            updateUrl: "/Districts/{id}",
-            deleteUrl: "/Districts/{id}",
-            fields: ["city_id", "code", "district_no", "name", "is_central", "is_active"],
-            labels: {
-                city_id: "İl Id",
-                code: "İlçe Kodu",
-                district_no: "İlçe No",
-                name: "İlçe Adı",
-                is_central: "Merkez",
-                is_active: "Aktif"
-            }
+        // districts: {
+        //     title: "İlçeler",
+        //     listUrl: "/Districts",
+        //     getUrl: "/Districts/{id}",
+        //     createUrl: "/Districts",
+        //     updateUrl: "/Districts/{id}",
+        //     deleteUrl: "/Districts/{id}",
+        //     fields: ["city_id", "code", "district_no", "name", "is_central", "is_active"],
+        //     labels: {
+        //         city_id: "İl Id",
+        //         code: "İlçe Kodu",
+        //         district_no: "İlçe No",
+        //         name: "İlçe Adı",
+        //         is_central: "Merkez",
+        //         is_active: "Aktif"
+        //     }
+        // },
+            districts: {
+        title: "İlçeler",
+        listUrl: "/Districts",
+        getUrl: "/Districts/{id}",
+        createUrl: "/Districts",
+        updateUrl: "/Districts/{id}",
+        deleteUrl: "/Districts/{id}",
+        fields: ["city_id", "code", "district_no", "name", "is_central", "is_active"],
+        labels: {
+            city_id: "İl",
+            code: "İlçe Kodu",
+            district_no: "İlçe No",
+            name: "İlçe Adı",
+            is_central: "Merkez",
+            is_active: "Aktif"
         },
+        lookups: {
+            city_id: {
+                url: "/Cities",
+                valueField: "id",
+                textField: "name"
+            }
+        }
+    },
         tahakkukYears: {
             title: "Tahakkuk Yılları",
             listUrl: "/TahakkukYears",
@@ -91,9 +130,8 @@
             createUrl: "/TahakkukYears",
             updateUrl: "/TahakkukYears/{id}",
             deleteUrl: "/TahakkukYears/{id}",
-            fields: ["district_id", "year", "is_active"],
+            fields: [ "year", "is_active"],
             labels: {
-                district_id: "İlçe Id",
                 year: "Yıl",
                 is_active: "Aktif"
             }
@@ -105,41 +143,40 @@
             createUrl: "/TahakkukInstitutions",
             updateUrl: "/TahakkukInstitutions/{id}",
             deleteUrl: "/TahakkukInstitutions/{id}",
-            fields: ["tahakkuk_year_id", "name", "is_active"],
+            fields: [ "name", "is_active"],
             labels: {
-                tahakkuk_year_id: "Tahakkuk Yılı Id",
                 name: "Kurum Adı",
                 is_active: "Aktif"
             }
         },
-        departments: {
-            title: "Daire Başkanlıkları",
-            listUrl: "/TahakkukDepartments",
-            getUrl: "/TahakkukDepartments/{id}",
-            createUrl: "/TahakkukDepartments",
-            updateUrl: "/TahakkukDepartments/{id}",
-            deleteUrl: "/TahakkukDepartments/{id}",
-            fields: ["tahakkuk_institution_id", "name", "is_active"],
-            labels: {
-                tahakkuk_institution_id: "Kurum Id",
-                name: "Daire Adı",
-                is_active: "Aktif"
-            }
-        },
-        directorates: {
-            title: "Müdürlükler",
-            listUrl: "/TahakkukDirectorates",
-            getUrl: "/TahakkukDirectorates/{id}",
-            createUrl: "/TahakkukDirectorates",
-            updateUrl: "/TahakkukDirectorates/{id}",
-            deleteUrl: "/TahakkukDirectorates/{id}",
-            fields: ["tahakkuk_department_id", "name", "is_active"],
-            labels: {
-                tahakkuk_department_id: "Daire Id",
-                name: "Müdürlük Adı",
-                is_active: "Aktif"
-            }
-        },
+        // departments: {
+        //     title: "Daire Başkanlıkları",
+        //     listUrl: "/TahakkukDepartments",
+        //     getUrl: "/TahakkukDepartments/{id}",
+        //     createUrl: "/TahakkukDepartments",
+        //     updateUrl: "/TahakkukDepartments/{id}",
+        //     deleteUrl: "/TahakkukDepartments/{id}",
+        //     fields: ["tahakkuk_institution_id", "name", "is_active"],
+        //     labels: {
+        //         tahakkuk_institution_id: "Kurum Id",
+        //         name: "Daire Adı",
+        //         is_active: "Aktif"
+        //     }
+        // },
+        // directorates: {
+        //     title: "Müdürlükler",
+        //     listUrl: "/TahakkukDirectorates",
+        //     getUrl: "/TahakkukDirectorates/{id}",
+        //     createUrl: "/TahakkukDirectorates",
+        //     updateUrl: "/TahakkukDirectorates/{id}",
+        //     deleteUrl: "/TahakkukDirectorates/{id}",
+        //     fields: ["tahakkuk_department_id", "name", "is_active"],
+        //     labels: {
+        //         tahakkuk_department_id: "Daire Id",
+        //         name: "Müdürlük Adı",
+        //         is_active: "Aktif"
+        //     }
+        // },
         scales: {
             title: "Ölçekler",
             listUrl: "/TahakkukScales",
@@ -147,10 +184,8 @@
             createUrl: "/TahakkukScales",
             updateUrl: "/TahakkukScales/{id}",
             deleteUrl: "/TahakkukScales/{id}",
-            fields: ["tahakkuk_directorate_id", "scale_value", "name", "is_active"],
+            fields: ["name", "is_active"],
             labels: {
-                tahakkuk_directorate_id: "Müdürlük Id",
-                scale_value: "Ölçek Değeri",
                 name: "Ölçek Adı",
                 is_active: "Aktif"
             }
@@ -162,36 +197,36 @@
             createUrl: "/TahakkukFeeSubjects",
             updateUrl: "/TahakkukFeeSubjects/{id}",
             deleteUrl: "/TahakkukFeeSubjects/{id}",
-            fields: ["tahakkuk_directorate_id", "name", "is_active"],
+            fields: [ "name", "is_active"],
             labels: {
-                tahakkuk_directorate_id: "Müdürlük Id",
                 name: "Ücret Konusu",
                 is_active: "Aktif"
             }
         },
-        definitions: {
-            title: "Tahakkuk Tanımları",
-            listUrl: "/TahakkukDefinitions",
-            getUrl: "/TahakkukDefinitions/{id}",
-            createUrl: "/TahakkukDefinitions",
-            updateUrl: "/TahakkukDefinitions/{id}",
-            deleteUrl: "/TahakkukDefinitions/{id}",
-            fields: ["tahakkuk_fee_subject_id", "tahakkuk_fee_sub_subject_id", "fee_text", "fee_amount", "has_vat", "description1", "description2", "is_active"],
-            labels: {
-                tahakkuk_fee_subject_id: "Ücret Konusu Id",
-                tahakkuk_fee_sub_subject_id: "Ücret Alt Konusu Id",
-                fee_text: "Ücret Metni",
-                fee_amount: "Tutar",
-                has_vat: "KDV Var",
-                description1: "Açıklama 1",
-                description2: "Açıklama 2",
-                is_active: "Aktif"
-            }
-        }
+        // definitions: {
+        //     title: "Tahakkuk Tanımları",
+        //     listUrl: "/TahakkukDefinitions",
+        //     getUrl: "/TahakkukDefinitions/{id}",
+        //     createUrl: "/TahakkukDefinitions",
+        //     updateUrl: "/TahakkukDefinitions/{id}",
+        //     deleteUrl: "/TahakkukDefinitions/{id}",
+        //     fields: ["tahakkuk_fee_subject_id", "tahakkuk_fee_sub_subject_id", "fee_text", "fee_amount", "has_vat", "description1", "description2", "is_active"],
+        //     labels: {
+        //         tahakkuk_fee_subject_id: "Ücret Konusu Id",
+        //         tahakkuk_fee_sub_subject_id: "Ücret Alt Konusu Id",
+        //         fee_text: "Ücret Metni",
+        //         fee_amount: "Tutar",
+        //         has_vat: "KDV Var",
+        //         description1: "Açıklama 1",
+        //         description2: "Açıklama 2",
+        //         is_active: "Aktif"
+        //     }
+        // }
     };
 
     let currentModule = "cities";
     let currentRecords = [];
+        let lookupData = {};
 
     function buildUrl(url, id = null) {
         let result = API_BASE_URL + url;
@@ -201,7 +236,7 @@
         return result;
     }
 
- async function apiRequest(url, method = "GET", data = null) {
+async function apiRequest(url, method = "GET", data = null) {
     const options = {
         method: method
     };
@@ -220,37 +255,55 @@
         throw new Error(errorText || "API isteği başarısız oldu.");
     }
 
-    if (response.status === 204) {
+    const text = await response.text();
+
+    if (!text) {
         return null;
     }
 
-    return await response.json();
+    try {
+        return JSON.parse(text);
+    } catch {
+        return text;
+    }
 }
     async function loadRecords() {
+
         const config = apiConfig[currentModule];
 
-        document.getElementById("listContainer").innerHTML =
-            "<div class='empty-msg'>Yükleniyor...</div>";
-
-        document.getElementById("current-module-title").innerText =
-            config.title + " Yönetimi";
-
         try {
+
+            await loadLookups(config);
+
             const url = buildUrl(config.listUrl);
+
             const result = await apiRequest(url);
 
-            currentRecords = Array.isArray(result) ? result : result.data || [];
+            currentRecords = Array.isArray(result)
+                ? result
+                : (result?.data || []);
 
             renderList();
-            document.getElementById("record-count").innerText =
-                currentRecords.length + " kayıt";
-        } catch (error) {
-            document.getElementById("listContainer").innerHTML =
-                "<div class='empty-msg'>Listeleme hatası: " + error.message + "</div>";
-        }
 
-            console.log(result);
-    console.log(currentRecords);
+        } catch (error) {
+
+            console.error(error);
+        }
+    }
+
+        async function loadLookups(config) {
+        lookupData = {};
+
+        if (!config.lookups) return;
+
+        for (const field in config.lookups) {
+            const lookup = config.lookups[field];
+            const result = await apiRequest(buildUrl(lookup.url));
+
+            lookupData[field] = Array.isArray(result)
+                ? result
+                : (result?.data || []);
+        }
     }
 
         function renderList() {
@@ -277,24 +330,39 @@
                 <tbody>
         `;
 
-        currentRecords.forEach(item => {
-            html += `
-                <tr class="record-row" data-id="${item.id}">
-                    ${displayFields.map(f => `<td>${item[f] ?? "-"}</td>`).join("")}
-                    <td>
-                        ${
-                            item.is_active
-                                ? "<span class='badge-active'>Aktif</span>"
-                                : "<span class='badge-active badge-inactive'>Pasif</span>"
-                        }
-                    </td>
-                    <td class="action-icons">
-                        <i class="fas fa-edit edit-icon" data-id="${item.id}"></i>
-                        <i class="fas fa-trash-alt delete-icon" data-id="${item.id}"></i>
-                    </td>
-                </tr>
-            `;
-        });
+    currentRecords.forEach(item => {
+        html += `
+            <tr class="record-row" data-id="${item.id}">
+
+                ${displayFields.map(f => {
+
+                    let value = item[f] ?? "-";
+
+                    // İlçe modülünde city name göster
+                    if (currentModule === "districts" && f === "city_id") {
+                        value = item.city?.name ?? "-";
+                    }
+
+                    return `<td>${value}</td>`;
+
+                }).join("")}
+
+                <td>
+                    ${
+                        item.is_active
+                            ? "<span class='badge-active'>Aktif</span>"
+                            : "<span class='badge-active badge-inactive'>Pasif</span>"
+                    }
+                </td>
+
+                <td class="action-icons">
+                    <i class="fas fa-edit edit-icon" data-id="${item.id}"></i>
+                    <i class="fas fa-trash-alt delete-icon" data-id="${item.id}"></i>
+                </td>
+
+            </tr>
+        `;
+    });
 
         html += "</tbody></table>";
         container.innerHTML = html;
@@ -356,14 +424,31 @@
                     </div>
                 `;
             }
-            else if (field.includes("_id")) {
-                html += `
-                    <div class="form-group">
-                        <label>${label}</label>
-                        <input type="number" id="field_${field}" value="${value ?? ""}">
-                    </div>
-                `;
-            }
+                else if (config.lookups && config.lookups[field]) {
+        const options = lookupData[field] || [];
+
+        html += `
+            <div class="form-group">
+                <label>${label}</label>
+                <select id="field_${field}">
+                    <option value="">Seçiniz</option>
+                    ${options.map(opt => `
+                        <option value="${opt.id}" ${Number(value) === Number(opt.id) ? "selected" : ""}>
+                            ${opt.name}
+                        </option>
+                    `).join("")}
+                </select>
+            </div>
+        `;
+    }
+    else if (field.includes("_id")) {
+        html += `
+            <div class="form-group">
+                <label>${label}</label>
+                <input type="number" id="field_${field}" value="${value ?? ""}">
+            </div>
+        `;
+    }
             else if (field === "fee_amount") {
                 html += `
                     <div class="form-group">
@@ -379,7 +464,28 @@
                         <textarea id="field_${field}">${value ?? ""}</textarea>
                     </div>
                 `;
-            }
+                } 
+                
+    //             else if (field === "plate_code") {
+
+    //     html += `
+    //         <div class="form-group">
+    //             <label>${label}</label>
+
+    //             <input
+    //                 type="number"
+    //                 id="field_${field}"
+    //                 value="${value ?? ""}"
+    //                 required
+    //                 min="1"
+    //                 max="81"
+    //                 step="1"
+    //                 oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+    //             >
+
+    //         </div>
+    //     `;
+    // }
             else {
                 html += `
                     <div class="form-group">
@@ -391,49 +497,85 @@
         });
 
         fieldsDiv.innerHTML = html;
-    }
+}
 
-    function getFormData() {
-        const config = apiConfig[currentModule];
-        const data = {};
+function getFormData() {
 
-        config.fields.forEach(field => {
-            const el = document.getElementById("field_" + field);
-            if (!el) return;
+    const config = apiConfig[currentModule];
 
-            if (el.type === "checkbox") {
-                data[field] = el.checked;
-            }
-            else if (el.type === "number") {
-                data[field] = el.value === "" ? null : Number(el.value);
-            }
-            else {
-                data[field] = el.value;
-            }
-        });
+    const data = {};
 
-        return data;
-    }
+    const editId = document.getElementById("editId").value;
+
+    data.id = editId ? Number(editId) : 0;
+
+    data.create_date = new Date().toISOString();
+
+    config.fields.forEach(field => {
+
+        const el = document.getElementById("field_" + field);
+
+        if (!el) return;
+
+        if (el.type === "checkbox") {
+
+            data[field] = el.checked;
+
+        }
+        else if (el.type === "number") {
+
+            data[field] =
+                el.value === ""
+                    ? 0
+                    : Number(el.value);
+
+        }
+        else {
+
+            data[field] = el.value;
+
+        }
+
+    });
+
+    return data;
+}
 
     async function saveRecord() {
+
         const config = apiConfig[currentModule];
+
         const editId = document.getElementById("editId").value;
+
         const data = getFormData();
 
         try {
+
             if (editId) {
+
                 const url = buildUrl(config.updateUrl, editId);
+
                 await apiRequest(url, "PUT", data);
+
                 alert("Kayıt güncellendi.");
+
             } else {
+
                 const url = buildUrl(config.createUrl);
+
                 await apiRequest(url, "POST", data);
+
                 alert("Kayıt eklendi.");
             }
 
             clearForm();
+
             await loadRecords();
+
         } catch (error) {
+
+            console.error(error);
+
             alert("Kaydetme hatası: " + error.message);
         }
     }
@@ -463,14 +605,24 @@
         generateFormFields(null);
     }
 
-    function switchModule(moduleName) {
+    // function switchModule(moduleName) {
+    //     currentModule = moduleName;
+
+    //     document.querySelectorAll(".nav-item").forEach(x => x.classList.remove("active"));
+    //     document.querySelector(`.nav-item[data-module="${moduleName}"]`)?.classList.add("active");
+
+    //     clearForm();
+    //     loadRecords();
+    // }
+        async function switchModule(moduleName) {
         currentModule = moduleName;
 
         document.querySelectorAll(".nav-item").forEach(x => x.classList.remove("active"));
         document.querySelector(`.nav-item[data-module="${moduleName}"]`)?.classList.add("active");
 
+        await loadRecords();
+
         clearForm();
-        loadRecords();
     }
 
     document.querySelectorAll(".nav-item").forEach(item => {

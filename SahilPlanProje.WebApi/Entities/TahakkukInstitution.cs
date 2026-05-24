@@ -5,15 +5,18 @@ namespace SahilPlanProje.WebApi.Entities
 {
     //Tahakkuk Kurumu Belediye / kurum
     public class TahakkukInstitution : BaseEntity
-    {
-        [Required]
-        public int tahakkuk_year_id { get; set; }
-        
+    {        
         [Required]
         [MaxLength(250)]
-        public string name { get; set; }
+        public string name { get; set; } = string.Empty;
 
-        [ForeignKey(nameof(tahakkuk_year_id))]
-        public TahakkukYear tahakkuk_year { get; set; }
+        //[MaxLength(50)]
+        //public string code { get; set; } = string.Empty;
+
+        //public string description { get; set; } = string.Empty ;
+
+        //public ICollection<TahakkukDepartment>? departments { get; set; }
+
+        //public ICollection<TahakkukDirectorate>? directorates { get; set; }
     }
 }

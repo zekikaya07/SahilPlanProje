@@ -19,26 +19,26 @@ namespace SahilPlanProje.WebApi.Controllers
             _context = context;
         }
 
-        [HttpGet]
-        public IActionResult ProductList()
-        {
-            var values = _context.Products.ToList();
-            return Ok(values);
-        }
+        //[HttpGet]
+        //public IActionResult ProductList()
+        //{
+        //    var values = _context.Products.ToList();
+        //    return Ok(values);
+        //}
 
-        [HttpPost]
-        public IActionResult CreateProduct(Product product)
-        {
-            var validationResult = _validator.Validate(product);
-            if (!validationResult.IsValid)
-            {
-                return BadRequest(validationResult.Errors.Select(x => x.ErrorMessage));
-            } else
-            {
-                _context.Products.Add(product);
-                _context.SaveChanges();
-                return Ok(new { message = "Ürün EKleme Başarılı", data = product });
-            }
-        }
+        //[HttpPost]
+        //public IActionResult CreateProduct(Product product)
+        //{
+        //    var validationResult = _validator.Validate(product);
+        //    if (!validationResult.IsValid)
+        //    {
+        //        return BadRequest(validationResult.Errors.Select(x => x.ErrorMessage));
+        //    } else
+        //    {
+        //        _context.Products.Add(product);
+        //        _context.SaveChanges();
+        //        return Ok(new { message = "Ürün EKleme Başarılı", data = product });
+        //    }
+        //}
     }
 }

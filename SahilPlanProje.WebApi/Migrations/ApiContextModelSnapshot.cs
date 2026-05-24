@@ -32,11 +32,13 @@ namespace SahilPlanProje.WebApi.Migrations
 
                     b.Property<string>("code")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("country_code")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)");
 
                     b.Property<DateTime>("create_date")
                         .HasColumnType("datetime2");
@@ -46,47 +48,17 @@ namespace SahilPlanProje.WebApi.Migrations
 
                     b.Property<string>("name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("plate_code")
-                        .HasColumnType("int");
+                    b.Property<string>("plate_code")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.HasKey("id");
 
-                    b.ToTable("Cities");
-                });
-
-            modelBuilder.Entity("SahilPlanProje.WebApi.Entities.Contact", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
-
-                    b.Property<string>("adress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("map_location")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("open_hours")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("phone")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("id");
-
-                    b.ToTable("Contacts");
+                    b.ToTable("Cities", (string)null);
                 });
 
             modelBuilder.Entity("SahilPlanProje.WebApi.Entities.District", b =>
@@ -124,95 +96,7 @@ namespace SahilPlanProje.WebApi.Migrations
 
                     b.HasIndex("city_id");
 
-                    b.ToTable("Districts");
-                });
-
-            modelBuilder.Entity("SahilPlanProje.WebApi.Entities.Feature", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
-
-                    b.Property<string>("description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("image_url")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("sub_title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("video_url")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("id");
-
-                    b.ToTable("Features");
-                });
-
-            modelBuilder.Entity("SahilPlanProje.WebApi.Entities.Message", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
-
-                    b.Property<string>("email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("is_read")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("messahe_detail")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("name_surname")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("send_date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("subject")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("id");
-
-                    b.ToTable("Messages");
-                });
-
-            modelBuilder.Entity("SahilPlanProje.WebApi.Entities.Product", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
-
-                    b.Property<double>("price")
-                        .HasColumnType("float");
-
-                    b.Property<string>("product_name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("id");
-
-                    b.ToTable("Products");
+                    b.ToTable("Districts", (string)null);
                 });
 
             modelBuilder.Entity("SahilPlanProje.WebApi.Entities.TahakkukDefinition", b =>
@@ -223,10 +107,13 @@ namespace SahilPlanProje.WebApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
+                    b.Property<int>("city_id")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("create_date")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("description1")
+                    b.Property<string>("description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -234,12 +121,8 @@ namespace SahilPlanProje.WebApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal?>("fee_amount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("fee_text")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("district_id")
+                        .HasColumnType("int");
 
                     b.Property<bool>("has_vat")
                         .HasColumnType("bit");
@@ -247,19 +130,51 @@ namespace SahilPlanProje.WebApi.Migrations
                     b.Property<bool>("is_active")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("tahakkuk_fee_sub_subject_id")
+                    b.Property<decimal>("price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("tahakkuk_department_id")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("tahakkuk_directorate_id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("tahakkuk_fee_sub_subject_id")
                         .HasColumnType("int");
 
                     b.Property<int>("tahakkuk_fee_subject_id")
                         .HasColumnType("int");
 
+                    b.Property<int>("tahakkuk_institution_id")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("tahakkuk_scale_id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("tahakkuk_year_id")
+                        .HasColumnType("int");
+
                     b.HasKey("id");
+
+                    b.HasIndex("city_id");
+
+                    b.HasIndex("district_id");
+
+                    b.HasIndex("tahakkuk_department_id");
+
+                    b.HasIndex("tahakkuk_directorate_id");
 
                     b.HasIndex("tahakkuk_fee_sub_subject_id");
 
                     b.HasIndex("tahakkuk_fee_subject_id");
 
-                    b.ToTable("TahakkukDefinitions");
+                    b.HasIndex("tahakkuk_institution_id");
+
+                    b.HasIndex("tahakkuk_scale_id");
+
+                    b.HasIndex("tahakkuk_year_id");
+
+                    b.ToTable("TahakkukDefinitions", (string)null);
                 });
 
             modelBuilder.Entity("SahilPlanProje.WebApi.Entities.TahakkukDepartment", b =>
@@ -278,7 +193,8 @@ namespace SahilPlanProje.WebApi.Migrations
 
                     b.Property<string>("name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<int>("tahakkuk_institution_id")
                         .HasColumnType("int");
@@ -287,7 +203,7 @@ namespace SahilPlanProje.WebApi.Migrations
 
                     b.HasIndex("tahakkuk_institution_id");
 
-                    b.ToTable("TahakkukDepartments");
+                    b.ToTable("TahakkukDepartments", (string)null);
                 });
 
             modelBuilder.Entity("SahilPlanProje.WebApi.Entities.TahakkukDirectorate", b =>
@@ -306,14 +222,20 @@ namespace SahilPlanProje.WebApi.Migrations
 
                     b.Property<string>("name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
-                    b.Property<int>("tahakkuk_department_id")
+                    b.Property<int?>("tahakkuk_department_id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("tahakkuk_institution_id")
                         .HasColumnType("int");
 
                     b.HasKey("id");
 
                     b.HasIndex("tahakkuk_department_id");
+
+                    b.HasIndex("tahakkuk_institution_id");
 
                     b.ToTable("TahakkukDirectorates");
                 });
@@ -334,7 +256,8 @@ namespace SahilPlanProje.WebApi.Migrations
 
                     b.Property<string>("name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<int>("tahakkuk_fee_subject_id")
                         .HasColumnType("int");
@@ -343,7 +266,7 @@ namespace SahilPlanProje.WebApi.Migrations
 
                     b.HasIndex("tahakkuk_fee_subject_id");
 
-                    b.ToTable("TahakkukFeeSubSubjects");
+                    b.ToTable("TahakkukFeeSubSubjects", (string)null);
                 });
 
             modelBuilder.Entity("SahilPlanProje.WebApi.Entities.TahakkukFeeSubject", b =>
@@ -362,21 +285,12 @@ namespace SahilPlanProje.WebApi.Migrations
 
                     b.Property<string>("name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("tahakkuk_directorate_id")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("tahakkuk_scale_id")
-                        .HasColumnType("int");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.HasKey("id");
 
-                    b.HasIndex("tahakkuk_directorate_id");
-
-                    b.HasIndex("tahakkuk_scale_id");
-
-                    b.ToTable("TahakkukFeeSubjects");
+                    b.ToTable("TahakkukFeeSubjects", (string)null);
                 });
 
             modelBuilder.Entity("SahilPlanProje.WebApi.Entities.TahakkukInstitution", b =>
@@ -398,14 +312,9 @@ namespace SahilPlanProje.WebApi.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
-                    b.Property<int>("tahakkuk_year_id")
-                        .HasColumnType("int");
-
                     b.HasKey("id");
 
-                    b.HasIndex("tahakkuk_year_id");
-
-                    b.ToTable("TahakkukInstitutions");
+                    b.ToTable("TahakkukInstitutions", (string)null);
                 });
 
             modelBuilder.Entity("SahilPlanProje.WebApi.Entities.TahakkukScale", b =>
@@ -424,19 +333,12 @@ namespace SahilPlanProje.WebApi.Migrations
 
                     b.Property<string>("name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("scale_value")
-                        .HasColumnType("int");
-
-                    b.Property<int>("tahakkuk_directorate_id")
-                        .HasColumnType("int");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.HasKey("id");
 
-                    b.HasIndex("tahakkuk_directorate_id");
-
-                    b.ToTable("TahakkukScales");
+                    b.ToTable("TahakkukScales", (string)null);
                 });
 
             modelBuilder.Entity("SahilPlanProje.WebApi.Entities.TahakkukYear", b =>
@@ -450,9 +352,6 @@ namespace SahilPlanProje.WebApi.Migrations
                     b.Property<DateTime>("create_date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("district_id")
-                        .HasColumnType("int");
-
                     b.Property<bool>("is_active")
                         .HasColumnType("bit");
 
@@ -461,9 +360,7 @@ namespace SahilPlanProje.WebApi.Migrations
 
                     b.HasKey("id");
 
-                    b.HasIndex("district_id");
-
-                    b.ToTable("TahakkukYears");
+                    b.ToTable("TahakkukYears", (string)null);
                 });
 
             modelBuilder.Entity("SahilPlanProje.WebApi.Entities.District", b =>
@@ -471,7 +368,7 @@ namespace SahilPlanProje.WebApi.Migrations
                     b.HasOne("SahilPlanProje.WebApi.Entities.City", "city")
                         .WithMany("districts")
                         .HasForeignKey("city_id")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("city");
@@ -479,19 +376,74 @@ namespace SahilPlanProje.WebApi.Migrations
 
             modelBuilder.Entity("SahilPlanProje.WebApi.Entities.TahakkukDefinition", b =>
                 {
+                    b.HasOne("SahilPlanProje.WebApi.Entities.City", "city")
+                        .WithMany()
+                        .HasForeignKey("city_id")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("SahilPlanProje.WebApi.Entities.District", "district")
+                        .WithMany()
+                        .HasForeignKey("district_id")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("SahilPlanProje.WebApi.Entities.TahakkukDepartment", "tahakkuk_department")
+                        .WithMany()
+                        .HasForeignKey("tahakkuk_department_id")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("SahilPlanProje.WebApi.Entities.TahakkukDirectorate", "tahakkuk_directorate")
+                        .WithMany()
+                        .HasForeignKey("tahakkuk_directorate_id")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("SahilPlanProje.WebApi.Entities.TahakkukFeeSubSubject", "tahakkuk_fee_sub_subject")
                         .WithMany()
-                        .HasForeignKey("tahakkuk_fee_sub_subject_id");
+                        .HasForeignKey("tahakkuk_fee_sub_subject_id")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("SahilPlanProje.WebApi.Entities.TahakkukFeeSubject", "tahakkuk_fee_subject")
                         .WithMany()
                         .HasForeignKey("tahakkuk_fee_subject_id")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("SahilPlanProje.WebApi.Entities.TahakkukInstitution", "tahakkuk_institution")
+                        .WithMany()
+                        .HasForeignKey("tahakkuk_institution_id")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("SahilPlanProje.WebApi.Entities.TahakkukScale", "tahakkuk_scale")
+                        .WithMany()
+                        .HasForeignKey("tahakkuk_scale_id")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("SahilPlanProje.WebApi.Entities.TahakkukYear", "tahakkuk_year")
+                        .WithMany()
+                        .HasForeignKey("tahakkuk_year_id")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("city");
+
+                    b.Navigation("district");
+
+                    b.Navigation("tahakkuk_department");
+
+                    b.Navigation("tahakkuk_directorate");
 
                     b.Navigation("tahakkuk_fee_sub_subject");
 
                     b.Navigation("tahakkuk_fee_subject");
+
+                    b.Navigation("tahakkuk_institution");
+
+                    b.Navigation("tahakkuk_scale");
+
+                    b.Navigation("tahakkuk_year");
                 });
 
             modelBuilder.Entity("SahilPlanProje.WebApi.Entities.TahakkukDepartment", b =>
@@ -509,11 +461,17 @@ namespace SahilPlanProje.WebApi.Migrations
                 {
                     b.HasOne("SahilPlanProje.WebApi.Entities.TahakkukDepartment", "tahakkuk_department")
                         .WithMany()
-                        .HasForeignKey("tahakkuk_department_id")
+                        .HasForeignKey("tahakkuk_department_id");
+
+                    b.HasOne("SahilPlanProje.WebApi.Entities.TahakkukInstitution", "tahakkuk_institution")
+                        .WithMany()
+                        .HasForeignKey("tahakkuk_institution_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("tahakkuk_department");
+
+                    b.Navigation("tahakkuk_institution");
                 });
 
             modelBuilder.Entity("SahilPlanProje.WebApi.Entities.TahakkukFeeSubSubject", b =>
@@ -521,60 +479,10 @@ namespace SahilPlanProje.WebApi.Migrations
                     b.HasOne("SahilPlanProje.WebApi.Entities.TahakkukFeeSubject", "tahakkuk_fee_subject")
                         .WithMany()
                         .HasForeignKey("tahakkuk_fee_subject_id")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("tahakkuk_fee_subject");
-                });
-
-            modelBuilder.Entity("SahilPlanProje.WebApi.Entities.TahakkukFeeSubject", b =>
-                {
-                    b.HasOne("SahilPlanProje.WebApi.Entities.TahakkukDirectorate", "tahakkuk_directorate")
-                        .WithMany()
-                        .HasForeignKey("tahakkuk_directorate_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SahilPlanProje.WebApi.Entities.TahakkukScale", "tahakkuk_scale")
-                        .WithMany()
-                        .HasForeignKey("tahakkuk_scale_id");
-
-                    b.Navigation("tahakkuk_directorate");
-
-                    b.Navigation("tahakkuk_scale");
-                });
-
-            modelBuilder.Entity("SahilPlanProje.WebApi.Entities.TahakkukInstitution", b =>
-                {
-                    b.HasOne("SahilPlanProje.WebApi.Entities.TahakkukYear", "tahakkuk_year")
-                        .WithMany()
-                        .HasForeignKey("tahakkuk_year_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("tahakkuk_year");
-                });
-
-            modelBuilder.Entity("SahilPlanProje.WebApi.Entities.TahakkukScale", b =>
-                {
-                    b.HasOne("SahilPlanProje.WebApi.Entities.TahakkukDirectorate", "tahakkuk_directorate")
-                        .WithMany()
-                        .HasForeignKey("tahakkuk_directorate_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("tahakkuk_directorate");
-                });
-
-            modelBuilder.Entity("SahilPlanProje.WebApi.Entities.TahakkukYear", b =>
-                {
-                    b.HasOne("SahilPlanProje.WebApi.Entities.District", "district")
-                        .WithMany()
-                        .HasForeignKey("district_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("district");
                 });
 
             modelBuilder.Entity("SahilPlanProje.WebApi.Entities.City", b =>

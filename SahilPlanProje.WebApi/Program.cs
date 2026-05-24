@@ -1,5 +1,4 @@
 using FluentValidation;
-using Microsoft.Extensions.DependencyInjection;
 using SahilPlanProje.WebApi.Context;
 using SahilPlanProje.WebApi.Entities;
 using SahilPlanProje.WebApi.ValidationRules;
@@ -7,17 +6,14 @@ using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddDbContext<ApiContext>();
-builder.Services.AddScoped<IValidator<Product>,ProductValidator>();
+builder.Services.AddScoped<IValidator<Product>, ProductValidator>();
 
-// Ýlk parametre: yapýlandýrma aksiyonu (boþ olabilir)
-// Ýkinci parametre: taranacak assembly'ler
 builder.Services.AddAutoMapper(cfg => { }, Assembly.GetExecutingAssembly());
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddSwaggerGen(options =>
 {
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -25,6 +21,8 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(
         Path.Combine(AppContext.BaseDirectory, xmlFilename)
     );
+
+    options.EnableAnnotations();
 });
 
 builder.Services.AddCors(options =>
@@ -35,6 +33,7 @@ builder.Services.AddCors(options =>
             .WithOrigins(
                 "https://sahilplanproje.com",
                 "https://www.sahilplanproje.com",
+                "https://admin.sahilplanproje.com",
                 "http://localhost:7095",
                 "https://localhost:7095",
                 "http://localhost:7072",
@@ -46,13 +45,6 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
 
 app.UseSwagger();
 app.UseSwaggerUI();
