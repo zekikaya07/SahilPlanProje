@@ -19,7 +19,6 @@ namespace SahilPlanProje.WebApi.Controllers
             _context = context;
             _mapper = mapper;
         }
-
         [HttpGet]
         public IActionResult GetCityList()
         {
@@ -82,20 +81,57 @@ namespace SahilPlanProje.WebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCity(int id)
         {
-            var city = await _context.Cities.FindAsync(id);
-
-            if (city == null)
-                return NotFound("Kayıt bulunamadı.");
-
-            _context.Cities.Remove(city);
-
-            await _context.SaveChangesAsync();
-
-            return Ok(new
+            try
             {
-                success = true,
-                message = "Kayıt silindi."
-            });
+                var city = await _context.Cities.FindAsync(id);
+
+                if (city == null)
+                    return NotFound("Kayıt bulunamadı.");
+
+
+
+                var hasSubSubject = await _context.Districts
+                                    .AnyAsync(x => x.city_id == id);
+
+                if (hasSubSubject)
+                {
+                    return BadRequest(new
+                    {
+                        success = false,
+                        message = "Bu il ilçe tanımlarında işlem görmüş / bağlantılı kayıt içerdiği için silinemez."
+                    });
+                }
+
+                var hasSubSubject2 = await _context.TahakkukDefinitions
+                                    .AnyAsync(x => x.city_id == id);
+
+                if (hasSubSubject2)
+                {
+                    return BadRequest(new
+                    {
+                        success = false,
+                        message = "Bu il tahakkuk tanımlarında işlem görmüş / bağlantılı kayıt içerdiği için silinemez."
+                    });
+                }
+                _context.Cities.Remove(city);
+
+                await _context.SaveChangesAsync();
+
+                return Ok(new
+                {
+                    success = true,
+                    message = "Kayıt silindi."
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    success = false,
+                    message = ex.Message,
+                    innerMessage = ex.InnerException?.Message
+                });
+            }
         }
 
         [HttpGet("getinfo")]

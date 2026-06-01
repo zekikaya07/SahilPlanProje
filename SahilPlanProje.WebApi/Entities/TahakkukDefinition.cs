@@ -14,6 +14,9 @@ namespace SahilPlanProje.WebApi.Entities
         public string description2 { get; set; } = string.Empty;
         // Sayısal ücret
         public decimal price { get; set; }
+        public decimal? price2 { get; set; }
+        public decimal? price3 { get; set; }
+        public decimal? price4 { get; set; }
 
         // KDV dahil mi
         public bool has_vat { get; set; }
@@ -23,7 +26,7 @@ namespace SahilPlanProje.WebApi.Entities
         [ForeignKey(nameof(city_id))]
         public City city { get; set; }
 
-        public int district_id { get; set; }
+        public int? district_id { get; set; }
         // Navigation Property
         [ForeignKey(nameof(district_id))]
         public District district { get; set; }
@@ -43,7 +46,7 @@ namespace SahilPlanProje.WebApi.Entities
         [ForeignKey(nameof(tahakkuk_fee_subject_id))]
         public TahakkukFeeSubject tahakkuk_fee_subject { get; set; }
 
-        public int tahakkuk_fee_sub_subject_id { get; set; }
+        public int? tahakkuk_fee_sub_subject_id { get; set; }
         // Navigation Property
         [ForeignKey(nameof(tahakkuk_fee_sub_subject_id))]
         public TahakkukFeeSubSubject tahakkuk_fee_sub_subject { get; set; }

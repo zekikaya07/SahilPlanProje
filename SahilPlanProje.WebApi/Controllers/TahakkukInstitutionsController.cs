@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SahilPlanProje.WebApi.Context;
 using SahilPlanProje.WebApi.Dtos.TahakkukInstitutionDtos;
 using SahilPlanProje.WebApi.Entities;
@@ -19,41 +20,53 @@ namespace SahilPlanProje.WebApi.Controllers
             _mapper = mapper;
         }
         [HttpGet]
-        public IActionResult GeTahakkukList()
+        public IActionResult GeTahakkukInstitutionList()
         {
             var values = _context.TahakkukInstitutions.ToList();
             return Ok(_mapper.Map<List<ResultTahakkukInstitutionDto>>(values));
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetTahakkuk(int id)
+        public IActionResult GetTahakkukInstitution(int id)
         {
             var value = _context.TahakkukInstitutions.Find(id);
             return Ok(_mapper.Map<ResultTahakkukInstitutionDto>(value));
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCity([FromBody] CreateTahakkukInstitutionDto city)
+        public async Task<IActionResult> CreateTahakkukInstitution([FromBody] CreateTahakkukInstitutionDto city)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            var value = _mapper.Map<TahakkukInstitution>(city);
-
-            await _context.TahakkukInstitutions.AddAsync(value);
-
-            await _context.SaveChangesAsync();
-
-            return Ok(new
+            try
             {
-                success = true,
-                message = "İl başarıyla eklendi.",
-                data = _mapper.Map<ResultTahakkukInstitutionDto>(value)
-            });
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
+                var value = _mapper.Map<TahakkukInstitution>(city);
+
+                await _context.TahakkukInstitutions.AddAsync(value);
+
+                await _context.SaveChangesAsync();
+
+                return Ok(new
+                {
+                    success = true,
+                    message = "İl başarıyla eklendi.",
+                    data = _mapper.Map<ResultTahakkukInstitutionDto>(value)
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    success = false,
+                    message = ex.Message,
+                    innerMessage = ex.InnerException?.Message
+                });
+            }
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCity(int id, [FromBody] UpdateTahakkukInstitutionDto city)
+        public async Task<IActionResult> UpdateTahakkukInstitution(int id, [FromBody] UpdateTahakkukInstitutionDto city)
         {
             if (id != city.id)
                 return BadRequest("Id uyuşmuyor.");
@@ -78,12 +91,38 @@ namespace SahilPlanProje.WebApi.Controllers
         // DELETE
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCity(int id)
+        public async Task<IActionResult> DeleteTahakkukInstitution(int id)
         {
             var city = await _context.TahakkukInstitutions.FindAsync(id);
 
             if (city == null)
                 return NotFound("Kayıt bulunamadı.");
+
+
+
+            var hasSubSubject = await _context.TahakkukDepartments
+                                .AnyAsync(x => x.tahakkuk_institution_id == id);
+
+            if (hasSubSubject)
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Kayıt işlem görmüş / bağlantılı kayıt içerdiği için silinemez."
+                });
+            }
+
+            var hasSubSubject1 = await _context.TahakkukDirectorates
+                    .AnyAsync(x => x.tahakkuk_institution_id == id);
+
+            if (hasSubSubject1)
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Kayıt işlem görmüş / bağlantılı kayıt içerdiği için silinemez."
+                });
+            }
 
             _context.TahakkukInstitutions.Remove(city);
 

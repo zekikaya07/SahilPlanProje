@@ -1,8 +1,9 @@
 ﻿
+using SahilPlanProje.WebApi.Dtos.TahakkukDepartmentDtos;
 using SahilPlanProje.WebApi.Dtos.TahakkukInstitutionDtos;
 using SahilPlanProje.WebApi.Entities;
 
-namespace SahilPlanProje.WebApi.Dtos.TahakkukDepartmentDtos
+namespace SahilPlanProje.WebApi.Dtos.TahakkukDirectorateDtos
 {
     public class ResultTahakkukDirectorateDto
     {

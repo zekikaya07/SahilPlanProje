@@ -1,4 +1,4 @@
-﻿namespace SahilPlanProje.WebApi.Dtos.DistrictDtos
+﻿namespace SahilPlanProje.WebApi.Dtos.TahakkukFeeSubSubjects
 {
     public class UpdateTahakkukFeeSubSubjectDto
     {

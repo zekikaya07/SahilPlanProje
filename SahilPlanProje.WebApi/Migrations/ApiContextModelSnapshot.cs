@@ -79,6 +79,11 @@ namespace SahilPlanProje.WebApi.Migrations
                     b.Property<DateTime>("create_date")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("district_group_no")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
+
                     b.Property<short>("district_no")
                         .HasColumnType("smallint");
 
@@ -121,7 +126,7 @@ namespace SahilPlanProje.WebApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("district_id")
+                    b.Property<int?>("district_id")
                         .HasColumnType("int");
 
                     b.Property<bool>("has_vat")
@@ -133,13 +138,22 @@ namespace SahilPlanProje.WebApi.Migrations
                     b.Property<decimal>("price")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<decimal?>("price2")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("price3")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("price4")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<int?>("tahakkuk_department_id")
                         .HasColumnType("int");
 
                     b.Property<int?>("tahakkuk_directorate_id")
                         .HasColumnType("int");
 
-                    b.Property<int>("tahakkuk_fee_sub_subject_id")
+                    b.Property<int?>("tahakkuk_fee_sub_subject_id")
                         .HasColumnType("int");
 
                     b.Property<int>("tahakkuk_fee_subject_id")
@@ -304,6 +318,9 @@ namespace SahilPlanProje.WebApi.Migrations
                     b.Property<DateTime>("create_date")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("institution_type")
+                        .HasColumnType("int");
+
                     b.Property<bool>("is_active")
                         .HasColumnType("bit");
 
@@ -385,8 +402,7 @@ namespace SahilPlanProje.WebApi.Migrations
                     b.HasOne("SahilPlanProje.WebApi.Entities.District", "district")
                         .WithMany()
                         .HasForeignKey("district_id")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("SahilPlanProje.WebApi.Entities.TahakkukDepartment", "tahakkuk_department")
                         .WithMany()
@@ -401,8 +417,7 @@ namespace SahilPlanProje.WebApi.Migrations
                     b.HasOne("SahilPlanProje.WebApi.Entities.TahakkukFeeSubSubject", "tahakkuk_fee_sub_subject")
                         .WithMany()
                         .HasForeignKey("tahakkuk_fee_sub_subject_id")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("SahilPlanProje.WebApi.Entities.TahakkukFeeSubject", "tahakkuk_fee_subject")
                         .WithMany()

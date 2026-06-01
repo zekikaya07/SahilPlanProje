@@ -1,15 +1,18 @@
 ﻿
+using SahilPlanProje.WebApi.Dtos.TahakkukDepartmentDtos;
 using SahilPlanProje.WebApi.Dtos.TahakkukInstitutionDtos;
 
-namespace SahilPlanProje.WebApi.Dtos.TahakkukDepartmentDtos
+namespace SahilPlanProje.WebApi.Dtos.TahakkukDirectorateDtos
 {
     public class GetByIdTahakkukDirectorateDto
     {
         public bool is_active { get; set; }
         public int id { get; set; }
+        public string name { get; set; } = string.Empty;
         public int tahakkuk_institution_id { get; set; }
         public GetByIdTahakkukInstitutionDto tahakkuk_institution { get; set; }
-        public string name { get; set; } = string.Empty;
+        public int tahakkuk_department_id { get; set; }
+        public GetByIdTahakkukDepartmentDto tahakkuk_department { get; set; }
 
     }
 }

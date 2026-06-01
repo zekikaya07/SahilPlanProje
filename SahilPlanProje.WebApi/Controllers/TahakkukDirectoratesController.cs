@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SahilPlanProje.WebApi.Context;
-using SahilPlanProje.WebApi.Dtos.TahakkukDepartmentDtos;
+using SahilPlanProje.WebApi.Dtos.TahakkukDirectorateDtos;
 using SahilPlanProje.WebApi.Entities;
 
 namespace SahilPlanProje.WebApi.Controllers
@@ -24,52 +24,66 @@ namespace SahilPlanProje.WebApi.Controllers
         public async Task<IActionResult> GetDistrictList()
         {
             //var values = await _context.Districts.ToListAsync();
-            var values = await _context.TahakkukDepartments
+            var values = await _context.TahakkukDirectorates
                         .Include(x => x.tahakkuk_institution)
+                        .Include(x => x.tahakkuk_department)
                         .ToListAsync();
 
-            return Ok(_mapper.Map<List<ResultTahakkukDepartmentDto>>(values));
+            return Ok(_mapper.Map<List<ResultTahakkukDirectorateDto>>(values));
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetDistrict(int id)
         {
 
-            var district = await _context.TahakkukDepartments
+            var district = await _context.TahakkukDirectorates
                 .Include(x => x.tahakkuk_institution)
+                .Include(x => x.tahakkuk_department)
                 .FirstOrDefaultAsync(x => x.id == id);
 
 
             if (district == null)
                 return NotFound("Kayıt bulunamadı.");
 
-            return Ok(_mapper.Map<GetByIdTahakkukDepartmentDto>(district));
+            return Ok(_mapper.Map<GetByIdTahakkukDirectorateDto>(district));
    
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateDistrict([FromBody] CreateTahakkukDepartmentDto districtDto)
+        public async Task<IActionResult> CreateDistrict([FromBody] CreateTahakkukDirectorateDto districtDto)
         {
-            var value = _mapper.Map<TahakkukDepartment>(districtDto);
-
-            _context.TahakkukDepartments.Add(value);
-            await _context.SaveChangesAsync();
-
-            return Ok(new
+            try
             {
-                success = true,
-                message = "Kayıt başarıyla eklendi.",
-                data = value
-            });
+                var value = _mapper.Map<TahakkukDirectorate>(districtDto);
+
+                _context.TahakkukDirectorates.Add(value);
+                await _context.SaveChangesAsync();
+
+                return Ok(new
+                {
+                    success = true,
+                    message = "Kayıt başarıyla eklendi.",
+                    data = value
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    success = false,
+                    message = ex.Message,
+                    innerMessage = ex.InnerException?.Message
+                });
+            }
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateDistrict(int id, [FromBody] UpdateTahakkukDepartmentDto city)
+        public async Task<IActionResult> UpdateDistrict(int id, [FromBody] UpdateTahakkukDirectorateDto city)
         {
             if (id != city.id)
                 return BadRequest("Id uyuşmuyor.");
 
-            var existingCity = await _context.TahakkukDepartments.FindAsync(id);
+            var existingCity = await _context.TahakkukDirectorates.FindAsync(id);
 
             if (existingCity == null)
                 return NotFound("Kayıt bulunamadı.");
@@ -88,12 +102,12 @@ namespace SahilPlanProje.WebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDistrict(int id)
         {
-            var city = await _context.TahakkukDepartments.FindAsync(id);
+            var city = await _context.TahakkukDirectorates.FindAsync(id);
 
             if (city == null)
                 return NotFound("Kayıt bulunamadı.");
 
-            _context.TahakkukDepartments.Remove(city);
+            _context.TahakkukDirectorates.Remove(city);
 
             await _context.SaveChangesAsync();
 

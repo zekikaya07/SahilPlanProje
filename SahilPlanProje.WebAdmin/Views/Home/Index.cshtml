@@ -4,12 +4,19 @@
 
 <!DOCTYPE html>
 <html lang="tr">
-@await Component.InvokeAsync("_HeadDefaultComponentPartial")
+
+<head>
+    <link href="/css/head.css" rel="stylesheet" />
+    <link href="/css/body.css" rel="stylesheet" />
+    <link href="/css/foot.css" rel="stylesheet" />
+    @await Component.InvokeAsync("_HeadDefaultComponentPartial")
+</head>
 <body>
 
     @await Component.InvokeAsync("_BodyDefaultComponentPartial")
     @await Component.InvokeAsync("_FooterDefaultComponentPartial")
 
+    <script src="/js/admin.js"></script>
 </body>
 
 </html>

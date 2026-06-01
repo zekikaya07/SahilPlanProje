@@ -1,7 +1,7 @@
 ﻿using SahilPlanProje.WebApi.Dtos.CityDtos;
 using SahilPlanProje.WebApi.Dtos.TahakkukFeeSubjectDtos;
 
-namespace SahilPlanProje.WebApi.Dtos.DistrictDtos
+namespace SahilPlanProje.WebApi.Dtos.TahakkukFeeSubSubjects
 {
     public class GetByIdTahakkukFeeSubSubjectDto
     {

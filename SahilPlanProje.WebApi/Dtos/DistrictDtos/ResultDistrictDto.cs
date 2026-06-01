@@ -15,6 +15,7 @@ namespace SahilPlanProje.WebApi.Dtos.DistrictDtos
 
         // İl içindeki sıra numarası
         public short district_no { get; set; }
+        public int district_group_no { get; set; } = 1;
 
         public string name { get; set; }
 

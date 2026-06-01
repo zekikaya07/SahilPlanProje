@@ -1,4 +1,6 @@
-﻿namespace SahilPlanProje.WebUI.Dtos
+﻿using SahilPlanProje.WebUI.Enums;
+
+namespace SahilPlanProje.WebUI.Dtos
 {
     public class TahakkukFilterOptionsDto
     {
@@ -16,64 +18,74 @@
     public class CityOptionDto
     {
         public int id { get; set; }
-        public string name { get; set; }
+
+        public string name { get; set; } = string.Empty;
     }
 
     public class DistrictOptionDto
     {
         public int id { get; set; }
+
         public int city_id { get; set; }
-        public string name { get; set; }
+
+        public string name { get; set; } = string.Empty;
     }
 
     public class YearOptionDto
     {
         public int id { get; set; }
-        public int district_id { get; set; }
+
         public int year { get; set; }
     }
 
     public class InstitutionOptionDto
     {
         public int id { get; set; }
-        public int tahakkuk_year_id { get; set; }
-        public string name { get; set; }
+
+        public string name { get; set; } = string.Empty;
+        public InstitutionType institution_type { get; set; } = InstitutionType.DistrictMunicipality;
     }
 
     public class DepartmentOptionDto
     {
         public int id { get; set; }
+
         public int tahakkuk_institution_id { get; set; }
-        public string name { get; set; }
+
+        public string name { get; set; } = string.Empty;
     }
 
     public class DirectorateOptionDto
     {
         public int id { get; set; }
-        public int tahakkuk_department_id { get; set; }
-        public string name { get; set; }
+
+        public int tahakkuk_institution_id { get; set; }
+
+        public int? tahakkuk_department_id { get; set; }
+
+        public string name { get; set; } = string.Empty;
     }
 
     public class ScaleOptionDto
     {
         public int id { get; set; }
-        public int tahakkuk_directorate_id { get; set; }
-        public decimal scale_value { get; set; }
-        public string name { get; set; }
+
+        public string name { get; set; } = string.Empty;
     }
 
     public class FeeSubjectOptionDto
     {
         public int id { get; set; }
-        public int tahakkuk_directorate_id { get; set; }
-        public int tahakkuk_scale_id { get; set; }
-        public string name { get; set; }
+
+        public string name { get; set; } = string.Empty;
     }
 
     public class FeeSubSubjectOptionDto
     {
         public int id { get; set; }
+
         public int tahakkuk_fee_subject_id { get; set; }
-        public string name { get; set; }
+
+        public string name { get; set; } = string.Empty;
     }
 }

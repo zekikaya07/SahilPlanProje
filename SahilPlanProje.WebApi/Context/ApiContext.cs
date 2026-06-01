@@ -40,6 +40,9 @@ namespace SahilPlanProje.WebApi.Context
                 .WithMany(x => x.districts)
                 .HasForeignKey(x => x.city_id)
                 .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<District>()
+                .Property(x => x.district_group_no)
+                .HasDefaultValue(1);
 
             modelBuilder.Entity<TahakkukYear>().ToTable("TahakkukYears");
             modelBuilder.Entity<TahakkukInstitution>().ToTable("TahakkukInstitutions");
@@ -112,6 +115,18 @@ namespace SahilPlanProje.WebApi.Context
 
             modelBuilder.Entity<TahakkukDefinition>()
                 .Property(x => x.price)
+                .HasColumnType("decimal(18,2)");
+
+            modelBuilder.Entity<TahakkukDefinition>()
+                .Property(x => x.price2)
+                .HasColumnType("decimal(18,2)");
+
+            modelBuilder.Entity<TahakkukDefinition>()
+                .Property(x => x.price3)
+                .HasColumnType("decimal(18,2)");
+
+            modelBuilder.Entity<TahakkukDefinition>()
+                .Property(x => x.price4)
                 .HasColumnType("decimal(18,2)");
         }
     }

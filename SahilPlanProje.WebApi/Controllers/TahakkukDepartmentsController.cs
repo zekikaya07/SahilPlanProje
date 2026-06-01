@@ -21,22 +21,21 @@ namespace SahilPlanProje.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetDistrictList()
+        public async Task<IActionResult> GetTahakkukDepartmentList()
         {
             //var values = await _context.Districts.ToListAsync();
-            var values = await _context.TahakkukDirectorates
+            var values = await _context.TahakkukDepartments
                         .Include(x => x.tahakkuk_institution)
-                        .Include(x => x.tahakkuk_department)
                         .ToListAsync();
 
             return Ok(_mapper.Map<List<ResultTahakkukDepartmentDto>>(values));
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetDistrict(int id)
+        public async Task<IActionResult> GetTahakkukDepartment(int id)
         {
 
-            var district = await _context.TahakkukDirectorates
+            var district = await _context.TahakkukDepartments
                 .Include(x => x.tahakkuk_institution)
                         .Include(x => x.tahakkuk_institution)
                 .FirstOrDefaultAsync(x => x.id == id);
@@ -50,28 +49,40 @@ namespace SahilPlanProje.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateDistrict([FromBody] CreateTahakkukDepartmentDto districtDto)
+        public async Task<IActionResult> CreateTahakkukDepartment([FromBody] CreateTahakkukDepartmentDto districtDto)
         {
-            var value = _mapper.Map<TahakkukDirectorate>(districtDto);
-
-            _context.TahakkukDirectorates.Add(value);
-            await _context.SaveChangesAsync();
-
-            return Ok(new
+            try
             {
-                success = true,
-                message = "Kayıt başarıyla eklendi.",
-                data = value
-            });
+                var value = _mapper.Map<TahakkukDepartment>(districtDto);
+
+                _context.TahakkukDepartments.Add(value);
+                await _context.SaveChangesAsync();
+
+                return Ok(new
+                {
+                    success = true,
+                    message = "Kayıt başarıyla eklendi.",
+                    data = value
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    success = false,
+                    message = ex.Message,
+                    innerMessage = ex.InnerException?.Message
+                });
+            }
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateDistrict(int id, [FromBody] UpdateTahakkukDepartmentDto city)
+        public async Task<IActionResult> UpdateTahakkukDepartment(int id, [FromBody] UpdateTahakkukDepartmentDto city)
         {
             if (id != city.id)
                 return BadRequest("Id uyuşmuyor.");
 
-            var existingCity = await _context.TahakkukDirectorates.FindAsync(id);
+            var existingCity = await _context.TahakkukDepartments.FindAsync(id);
 
             if (existingCity == null)
                 return NotFound("Kayıt bulunamadı.");
@@ -88,14 +99,29 @@ namespace SahilPlanProje.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteDistrict(int id)
+        public async Task<IActionResult> DeleteTahakkukDepartment(int id)
         {
-            var city = await _context.TahakkukDirectorates.FindAsync(id);
+            var city = await _context.TahakkukDepartments.FindAsync(id);
 
             if (city == null)
                 return NotFound("Kayıt bulunamadı.");
 
-            _context.TahakkukDirectorates.Remove(city);
+
+            var hasSubSubject = await _context.TahakkukDirectorates
+                                .AnyAsync(x => x.tahakkuk_department_id == id);
+
+            if (hasSubSubject)
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Bu Daire Başkanlığı işlem görmüş / bağlantılı kayıt içerdiği için silinemez."
+                });
+            }
+
+
+
+            _context.TahakkukDepartments.Remove(city);
 
             await _context.SaveChangesAsync();
 

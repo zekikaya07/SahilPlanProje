@@ -60,7 +60,7 @@ namespace SahilPlanProje.WebApi.Controllers
             if (id != city.id)
                 return BadRequest("Id uyuşmuyor.");
 
-            var existingCity = await _context.Cities.FindAsync(id);
+            var existingCity = await _context.TahakkukYears.FindAsync(id);
 
             if (existingCity == null)
                 return NotFound("Kayıt bulunamadı.");
@@ -82,12 +82,12 @@ namespace SahilPlanProje.WebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCity(int id)
         {
-            var city = await _context.Cities.FindAsync(id);
+            var city = await _context.TahakkukYears.FindAsync(id);
 
             if (city == null)
                 return NotFound("Kayıt bulunamadı.");
 
-            _context.Cities.Remove(city);
+            _context.TahakkukYears.Remove(city);
 
             await _context.SaveChangesAsync();
 

@@ -23,7 +23,9 @@ namespace SahilPlanProje.WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetTahakkukDefinitionList()
         {
-            var values = await _context.TahakkukDefinitions
+            try
+            {
+                var values = await _context.TahakkukDefinitions
                 .Include(x => x.city)
                 .Include(x => x.district)
                 .Include(x => x.tahakkuk_year)
@@ -34,8 +36,18 @@ namespace SahilPlanProje.WebApi.Controllers
                 .Include(x => x.tahakkuk_department)
                 .Include(x => x.tahakkuk_directorate)
                 .ToListAsync();
+                return Ok(_mapper.Map<List<ResultTahakkukDefinitionDto>>(values));
 
-            return Ok(_mapper.Map<List<ResultTahakkukDefinitionDto>>(values));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    success = false,
+                    message = ex.Message,
+                    innerMessage = ex.InnerException?.Message
+                });
+            }
         }
 
         [HttpGet("{id}")]
@@ -62,17 +74,29 @@ namespace SahilPlanProje.WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateTahakkukDefinition([FromBody] CreateTahakkukDefinitionDto dto)
         {
-            var value = _mapper.Map<TahakkukDefinition>(dto);
-
-            _context.TahakkukDefinitions.Add(value);
-            await _context.SaveChangesAsync();
-
-            return Ok(new
+            try
             {
-                success = true,
-                message = "Kayıt başarıyla eklendi.",
-                data = value
-            });
+                var value = _mapper.Map<TahakkukDefinition>(dto);
+
+                _context.TahakkukDefinitions.Add(value);
+                await _context.SaveChangesAsync();
+
+                return Ok(new
+                {
+                    success = true,
+                    message = "Kayıt başarıyla eklendi.",
+                    data = value
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    success = false,
+                    message = ex.Message,
+                    innerMessage = ex.InnerException?.Message
+                });
+            }
         }
 
         [HttpPut("{id}")]
@@ -114,5 +138,8 @@ namespace SahilPlanProje.WebApi.Controllers
                 message = "Kayıt silindi."
             });
         }
+
+
+
     }
 }

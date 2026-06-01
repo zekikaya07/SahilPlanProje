@@ -1,6 +1,8 @@
 ﻿using SahilPlanProje.WebApi.Dtos.CityDtos;
 using SahilPlanProje.WebApi.Dtos.TahakkukDepartmentDtos;
+using SahilPlanProje.WebApi.Dtos.TahakkukDirectorateDtos;
 using SahilPlanProje.WebApi.Dtos.TahakkukFeeSubjectDtos;
+using SahilPlanProje.WebApi.Dtos.TahakkukFeeSubSubjects;
 using SahilPlanProje.WebApi.Dtos.TahakkukInstitutionDtos;
 using SahilPlanProje.WebApi.Dtos.TahakkukScaleDtos;
 using SahilPlanProje.WebApi.Dtos.TahakkukYearDtos;
@@ -10,15 +12,19 @@ namespace SahilPlanProje.WebApi.Dtos.DistrictDtos
 {
     public class ResultTahakkukDefinitionDto
     {
+        public int id { get; set; }
         public bool is_active { get; set; }
         public string description { get; set; } = string.Empty;
         public string description2 { get; set; } = string.Empty;
         // Sayısal ücret
         public decimal price { get; set; }
+        public decimal? price2 { get; set; }
+        public decimal? price3 { get; set; }
+        public decimal? price4 { get; set; }
         public bool has_vat { get; set; }
         public int city_id { get; set; }
         public GetByIdCityDto city { get; set; }
-        public int district_id { get; set; }
+        public int? district_id { get; set; }
         public GetByIdDistrictDto district { get; set; }
         public int tahakkuk_year_id { get; set; }
         public GetByIdTahakkukYearDto tahakkuk_year { get; set; }

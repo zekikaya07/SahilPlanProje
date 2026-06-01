@@ -11,6 +11,7 @@
         // İl içindeki sıra numarası
         /// <example>1</example>
         public short district_no { get; set; }
+        public int district_group_no { get; set; } = 1;
 
         /// <example>Alanya</example>
         public string name { get; set; }

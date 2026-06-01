@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SahilPlanProje.WebApi.Context;
 using SahilPlanProje.WebApi.Dtos.DistrictDtos;
+using SahilPlanProje.WebApi.Dtos.TahakkukFeeSubSubjects;
 using SahilPlanProje.WebApi.Entities;
 
 namespace SahilPlanProje.WebApi.Controllers
@@ -43,28 +44,40 @@ namespace SahilPlanProje.WebApi.Controllers
             if (district == null)
                 return NotFound("Kayıt bulunamadı.");
 
-            return Ok(_mapper.Map<GetByIdDistrictDto>(district));
+            return Ok(_mapper.Map<GetByIdTahakkukFeeSubSubjectDto>(district));
    
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateDistrict([FromBody] CreateDistrictDto districtDto)
+        public async Task<IActionResult> CreateDistrict([FromBody] CreateTahakkukFeeSubSubjectDto districtDto)
         {
-            var value = _mapper.Map<TahakkukFeeSubSubject>(districtDto);
-
-            _context.TahakkukFeeSubSubjects.Add(value);
-            await _context.SaveChangesAsync();
-
-            return Ok(new
+            try
             {
-                success = true,
-                message = "Kayıt başarıyla eklendi.",
-                data = value
-            });
+                var value = _mapper.Map<TahakkukFeeSubSubject>(districtDto);
+
+                _context.TahakkukFeeSubSubjects.Add(value);
+                await _context.SaveChangesAsync();
+
+                return Ok(new
+                {
+                    success = true,
+                    message = "Kayıt başarıyla eklendi.",
+                    data = value
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    success = false,
+                    message = ex.Message,
+                    innerMessage = ex.InnerException?.Message
+                });
+            }
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateDistrict(int id, [FromBody] UpdateDistrictDto city)
+        public async Task<IActionResult> UpdateDistrict(int id, [FromBody] UpdateTahakkukFeeSubSubjectDto city)
         {
             if (id != city.id)
                 return BadRequest("Id uyuşmuyor.");

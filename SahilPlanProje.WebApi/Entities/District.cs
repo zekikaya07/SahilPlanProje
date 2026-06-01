@@ -16,7 +16,7 @@ namespace SahilPlanProje.WebApi.Entities
         public string name { get; set; } = string.Empty;
 
         public bool is_central { get; set; }
-
+        public int district_group_no { get; set; } = 1;
 
         // Navigation Property
         [ForeignKey(nameof(city_id))]

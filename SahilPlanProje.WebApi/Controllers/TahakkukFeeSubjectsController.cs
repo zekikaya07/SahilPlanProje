@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SahilPlanProje.WebApi.Context;
 using SahilPlanProje.WebApi.Dtos.TahakkukFeeSubjectDtos;
 using SahilPlanProje.WebApi.Entities;
@@ -19,41 +20,53 @@ namespace SahilPlanProje.WebApi.Controllers
             _mapper = mapper;
         }
         [HttpGet]
-        public IActionResult GeTahakkukList()
+        public IActionResult GeTahakkukFeeSubjectList()
         {
             var values = _context.TahakkukFeeSubjects.ToList();
             return Ok(_mapper.Map<List<ResultTahakkukFeeSubjectDto>>(values));
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetTahakkuk(int id)
+        public IActionResult GetTahakkukFeeSubject(int id)
         {
             var value = _context.TahakkukFeeSubjects.Find(id);
             return Ok(_mapper.Map<ResultTahakkukFeeSubjectDto>(value));
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCity([FromBody] CreateTahakkukFeeSubjectDto city)
+        public async Task<IActionResult> CreateTahakkukFeeSubject([FromBody] CreateTahakkukFeeSubjectDto city)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            var value = _mapper.Map<TahakkukFeeSubject>(city);
-
-            await _context.TahakkukFeeSubjects.AddAsync(value);
-
-            await _context.SaveChangesAsync();
-
-            return Ok(new
+            try
             {
-                success = true,
-                message = "İl başarıyla eklendi.",
-                data = _mapper.Map<ResultTahakkukFeeSubjectDto>(value)
-            });
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
+                var value = _mapper.Map<TahakkukFeeSubject>(city);
+
+                await _context.TahakkukFeeSubjects.AddAsync(value);
+
+                await _context.SaveChangesAsync();
+
+                return Ok(new
+                {
+                    success = true,
+                    message = "İl başarıyla eklendi.",
+                    data = _mapper.Map<ResultTahakkukFeeSubjectDto>(value)
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    success = false,
+                    message = ex.Message,
+                    innerMessage = ex.InnerException?.Message
+                });
+            }
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCity(int id, [FromBody] UpdateTahakkukFeeSubjectDto city)
+        public async Task<IActionResult> UpdateTahakkukFeeSubject(int id, [FromBody] UpdateTahakkukFeeSubjectDto city)
         {
             if (id != city.id)
                 return BadRequest("Id uyuşmuyor.");
@@ -78,15 +91,26 @@ namespace SahilPlanProje.WebApi.Controllers
         // DELETE
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCity(int id)
+        public async Task<IActionResult> DeleteTahakkukFeeSubject(int id)
         {
-            var city = await _context.TahakkukFeeSubjects.FindAsync(id);
+            var feeSubject = await _context.TahakkukFeeSubjects.FindAsync(id);
 
-            if (city == null)
+            if (feeSubject == null)
                 return NotFound("Kayıt bulunamadı.");
 
-            _context.TahakkukFeeSubjects.Remove(city);
+            var hasSubSubject = await _context.TahakkukFeeSubSubjects
+                .AnyAsync(x => x.tahakkuk_fee_subject_id == id);
 
+            if (hasSubSubject)
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Bu ücret konusu işlem görmüş / bağlantılı kayıt içerdiği için silinemez."
+                });
+            }
+
+            _context.TahakkukFeeSubjects.Remove(feeSubject);
             await _context.SaveChangesAsync();
 
             return Ok(new
@@ -95,6 +119,24 @@ namespace SahilPlanProje.WebApi.Controllers
                 message = "Kayıt silindi."
             });
         }
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> DeleteCity(int id)
+        //{
+        //    var city = await _context.TahakkukFeeSubjects.FindAsync(id);
+
+        //    if (city == null)
+        //        return NotFound("Kayıt bulunamadı.");
+
+        //    _context.TahakkukFeeSubjects.Remove(city);
+
+        //    await _context.SaveChangesAsync();
+
+        //    return Ok(new
+        //    {
+        //        success = true,
+        //        message = "Kayıt silindi."
+        //    });
+        //}
 
         [HttpGet("getinfo")]
         public IActionResult GetInfo()

@@ -1,0 +1,37 @@
+#dynamicFormFields {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px 14px;
+}
+
+    #dynamicFormFields .form-group {
+        margin-bottom: 0;
+    }
+
+        #dynamicFormFields .form-group.full-row {
+            grid-column: span 2;
+        }
+
+    #dynamicFormFields textarea {
+        min-height: 70px;
+        resize: vertical;
+    }
+
+.entity-table tr.selected-row {
+    background: #dbeafe !important;
+    box-shadow: inset 4px 0 0 #2563eb;
+}
+
+    .entity-table tr.selected-row td {
+        font-weight: 600;
+    }
+
+@media (max-width: 900px) {
+    #dynamicFormFields {
+        grid-template-columns: 1fr;
+    }
+
+        #dynamicFormFields .form-group.full-row {
+            grid-column: span 1;
+        }
+}

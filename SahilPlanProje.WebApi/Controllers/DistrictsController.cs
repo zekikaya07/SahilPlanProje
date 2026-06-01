@@ -93,6 +93,18 @@ namespace SahilPlanProje.WebApi.Controllers
             if (city == null)
                 return NotFound("Kayıt bulunamadı.");
 
+            var hasSubSubject = await _context.TahakkukDefinitions
+                    .AnyAsync(x => x.district_id == id);
+
+            if (hasSubSubject)
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Bu ilçe tahakkuk tanımlarında işlem görmüş / bağlantılı kayıt içerdiği için silinemez."
+                });
+            }
+
             _context.Districts.Remove(city);
 
             await _context.SaveChangesAsync();
